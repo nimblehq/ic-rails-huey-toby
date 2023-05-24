@@ -1,4 +1,4 @@
-Link to the milestone on Github e.g. https://github.com/nimblehq/git-templates/milestone/41?closed=1  
+Link to the milestone on Github e.g. https://github.com/nimblehq/ic-rails-huey-toby/milestone/41?closed=1  
 or link to the release on the project management tool e.g. https://app.shortcut.com/nimblehq/label/12345
 
 ## Features
