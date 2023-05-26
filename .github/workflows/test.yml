@@ -131,25 +131,6 @@ jobs:
         with:
           bundler-cache: true
 
-      - name: Setup Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'yarn'
-
-      - name: Cache Node modules
-        id: node-modules-cache
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-nodemodules-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-nodemodules-
-
-      - name: Yarn install
-        if: steps.node-modules-cache.outputs.cache-hit != 'true'
-        run: yarn
-
       - name: Run Undercover
         run: bundle exec undercover-report
 
