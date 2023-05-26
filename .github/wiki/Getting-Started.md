@@ -8,6 +8,12 @@
 
 ### Development
 
+Install dependencies:
+
+```sh
+make install-dependencies
+```
+
 Run the Rails app:
 
 ```sh
