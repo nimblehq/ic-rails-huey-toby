@@ -1,4 +1,4 @@
-Link to the milestone on Github e.g. https://github.com/nimblehq/ic-rails-huey-toby/milestone/41?closed=1
+https://github.com/nimblehq/ic-rails-huey-toby/milestone/{milestone-id}?closed=1
 
 ## Features
 Provide the Pull Request IDs in the section for each type (feature, chore, and bug), e.g.
