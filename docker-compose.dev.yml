@@ -1,0 +1,17 @@
+version: '3.2'
+
+services:
+  db:
+    image: postgres:14.4
+    container_name: ic_rails_huey_toby_db
+    environment:
+      - POSTGRES_DB=ic_rails_huey_toby_development
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:6.2.7
+    container_name: ic_rails_huey_toby_redis
+    ports:
+      - "6379:6379"
