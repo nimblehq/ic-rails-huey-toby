@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
-      root "health#show"
+      root "/health#show"
     end
   end
   root "health#show"

@@ -12,7 +12,7 @@ class HealthController < ApplicationController
   def render_up
     respond_to do |format|
       format.html { render html: html_status('green'), status: :ok }
-      format.json { render json: {}, status: :ok }
+      format.json { render json: { message: 'OK' }, status: :ok }
     end
   end
 
