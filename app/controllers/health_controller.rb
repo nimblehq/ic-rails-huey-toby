@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
-class HealthController < ApplicationController
+# rubocop:disable Rails/ApplicationController
+class HealthController < ActionController::Base
   rescue_from Exception, with: :render_down
 
   def show
@@ -29,3 +30,4 @@ class HealthController < ApplicationController
   end
   # rubocop:enable Rails/OutputSafety
 end
+# rubocop:enable Rails/ApplicationController

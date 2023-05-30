@@ -4,5 +4,6 @@ Rails.application.routes.draw do
       root "/health#show"
     end
   end
+  
   root "health#show"
 end
