@@ -54,6 +54,8 @@ GEM
     activerecord (7.0.1)
       activemodel (= 7.0.1)
       activesupport (= 7.0.1)
+    activerecord-import (1.4.1)
+      activerecord (>= 4.2)
     activestorage (7.0.1)
       actionpack (= 7.0.1)
       activejob (= 7.0.1)
@@ -398,10 +400,12 @@ GEM
     zeitwerk (2.6.8)
 
 PLATFORMS
+  x86_64-darwin-21
   x86_64-darwin-22
   x86_64-linux
 
 DEPENDENCIES
+  activerecord-import
   awesome_print
   better_errors
   binding_of_caller

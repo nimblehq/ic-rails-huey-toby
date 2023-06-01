@@ -2,6 +2,7 @@ source 'https://rubygems.org'
 ruby '3.0.1'
 
 # Backend
+gem 'activerecord-import'
 gem 'rails', '7.0.1' # Latest stable
 gem 'pg' # Use Postgresql as database
 gem 'puma' # Use Puma as the app server
