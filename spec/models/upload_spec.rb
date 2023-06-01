@@ -7,7 +7,7 @@ RSpec.describe Upload, type: :model do
     context 'given a valid search engine and csv file' do
       it 'returns true' do
         upload = described_class.new(
-          search_engine: 'Google',
+          search_engine: 'google',
           csv_file: fixture_file_upload('upload_valid.csv', 'text/csv')
         )
 
@@ -20,7 +20,7 @@ RSpec.describe Upload, type: :model do
     context 'given an invalid search engine' do
       it 'returns false' do
         upload = described_class.new(
-          search_engine: 'Yahoo',
+          search_engine: 'yahoo',
           csv_file: fixture_file_upload('upload_valid.csv', 'text/csv')
         )
 
@@ -33,7 +33,7 @@ RSpec.describe Upload, type: :model do
     context 'given an empty csv file' do
       it 'returns false' do
         upload = described_class.new(
-          search_engine: 'Google',
+          search_engine: 'google',
           csv_file: nil
         )
 
@@ -46,7 +46,7 @@ RSpec.describe Upload, type: :model do
     context 'given an invalid file extension' do
       it 'returns false' do
         upload = described_class.new(
-          search_engine: 'Google',
+          search_engine: 'google',
           csv_file: fixture_file_upload('upload_invalid_extension.txt', 'text')
         )
 
@@ -59,7 +59,7 @@ RSpec.describe Upload, type: :model do
     context 'given an invalid file count' do
       it 'returns false' do
         upload = described_class.new(
-          search_engine: 'Google',
+          search_engine: 'google',
           csv_file: fixture_file_upload('upload_invalid_count.csv', 'text/csv')
         )
 
@@ -74,7 +74,7 @@ RSpec.describe Upload, type: :model do
         csv_file = fixture_file_upload('upload_valid.csv', 'text/csv')
         allow(csv_file).to receive(:read).and_raise(StandardError)
 
-        upload = described_class.new(search_engine: 'Google', csv_file: csv_file)
+        upload = described_class.new(search_engine: 'google', csv_file: csv_file)
 
         expect(upload.save).to be(false)
         expect(upload.errors.full_messages).to eq([I18n.t('upload.validation.save_failed')])

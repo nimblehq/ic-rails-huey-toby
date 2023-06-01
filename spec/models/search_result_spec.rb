@@ -22,8 +22,8 @@ RSpec.describe SearchResult, type: :model do
       expect(search_result.errors[:search_engine]).to include("can't be blank")
     end
 
-    it 'is invalid with a search engine other than Google or Bing' do
-      search_result = described_class.new(search_engine: 'Yahoo')
+    it 'is invalid with a search engine other than google or bing' do
+      search_result = described_class.new(search_engine: 'yahoo')
       search_result.valid?
       expect(search_result.errors[:search_engine]).to include('is not included in the list')
     end
