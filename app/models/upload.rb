@@ -5,7 +5,7 @@ gem 'activerecord-import'
 class Upload
   include ActiveModel::Validations
 
-  attr_accessor :search_engine, :csv_file
+  attr_reader :search_engine, :csv_file
 
   validates_with UploadValidator
 
