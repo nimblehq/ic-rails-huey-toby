@@ -9,7 +9,7 @@ module Search
         super(keyword, language)
       end
 
-      def search
+      def call
         uri = URI.parse("#{GOOGLE_SEARCH_BASE_URL}?q=#{keyword}&hl=#{language}&lr=#{language}")
 
         response = Net::HTTP.get_response(uri)
