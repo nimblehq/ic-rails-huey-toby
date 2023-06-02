@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class SearchResult < ApplicationRecord
-  SEARCH_ENGINES = %w[google bing].freeze
+  enum search_engines: { google: 0, bing: 1 }
 
   validates :keyword, presence: true
-  validates :search_engine, presence: true, inclusion: { in: SEARCH_ENGINES }
+  validates :search_engine, presence: true
 end

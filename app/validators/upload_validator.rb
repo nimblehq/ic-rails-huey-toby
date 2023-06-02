@@ -25,7 +25,7 @@ class UploadValidator < ActiveModel::Validator
   def validate_search_engine
     if search_engine.blank?
       add_error :search_engine_empty
-    elsif !search_engine.in?(SearchResult::SEARCH_ENGINES)
+    elsif !search_engine.in?(SearchResult.search_engines.keys)
       add_error :search_engine_invalid
     end
   end
