@@ -1,0 +1,46 @@
+version: '3.2'
+
+services:
+  db:
+    image: postgres:14.4
+    container_name: ic_rails_huey_toby_db
+    environment:
+      - POSTGRES_DB=ic_rails_huey_toby_production
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:6.2.7
+    container_name: ic_rails_huey_toby_redis
+    ports:
+      - "6379:6379"
+
+  web:
+    build:
+      context: .
+      cache_from:
+        - ${DOCKER_REGISTRY_HOST}/${DOCKER_IMAGE}:${BRANCH_TAG}
+      args:
+        - BUILD_ENV=production
+        - RUBY_ENV=production
+    image: ${DOCKER_REGISTRY_HOST}/${DOCKER_IMAGE}:${BRANCH_TAG}
+    container_name: ic_rails_huey_toby_web
+    command: bin/start.sh
+    ports:
+      - "${PORT}:${PORT}"
+    stdin_open: true
+    tty: true
+    depends_on:
+      - db
+    volumes:
+      - "ruby-bundle:/bundle"
+    environment:
+      - RACK_ENV=production
+      - RAILS_ENV=production
+      - DATABASE_URL=postgres://postgres@db/ic_rails_huey_toby_production
+      - DEFAULT_HOST
+      - MAILER_SENDER
+      - RAILS_MASTER_KEY
+
+volumes:
+  ruby-bundle:
