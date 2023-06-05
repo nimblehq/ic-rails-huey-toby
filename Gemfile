@@ -2,7 +2,8 @@ source 'https://rubygems.org'
 ruby '3.0.1'
 
 # Backend
-gem 'activerecord-import'
+gem 'activerecord-import' # Bulk insert records into ActiveRecord
+gem 'jsonapi-serializer' # Fast, simple and easily customizable JSON:API serializer for Ruby objects
 gem 'rails', '7.0.1' # Latest stable
 gem 'pg' # Use Postgresql as database
 gem 'puma' # Use Puma as the app server
