@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
-      post 'upload', to: 'upload#create'
+      resources :upload, only: [:create], controller: 'search_results'
 
       root "/health#show"
     end

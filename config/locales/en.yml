@@ -31,12 +31,8 @@
 
 en:
   hello: "Hello world"
-  upload:
-    upload_success: "Upload success."
+  upload_form:
+    upload_success: "Upload success, please wait for the results."
     validation:
-      save_failed: "Failed to save search results."
-      search_engine_empty: "Search engine can't be empty: search_engine."
-      search_engine_invalid: "Search engine is invalid, must be 'google' or 'bing'."
-      csv_file_empty: "CSV file can't be empty: csv_file."
       csv_file_invalid_extension: "CSV file is invalid, must have .csv extension."
       csv_file_invalid_count: "CSV file is invalid, must have 1-1000 keywords."
