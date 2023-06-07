@@ -2,6 +2,10 @@
 
 require 'csv'
 
+CSV_CONTENT_TYPE = 'text/csv'
+CSV_COUNT_MIN = 1
+CSV_COUNT_MAX = 1000
+
 class UploadForm
   include ActiveModel::Validations
 
@@ -14,25 +18,25 @@ class UploadForm
   validate :valid_content_type, if: -> { csv_file.present? }
   validate :valid_count, if: -> { csv_file.present? }
 
-  def initialize(params)
-    @search_engine = params[:search_engine]
-    @csv_file = params[:csv_file]
+  def initialize(search_engine:, csv_file:)
+    @search_engine = search_engine
+    @csv_file = csv_file
   end
 
   def valid_content_type
-    return if csv_file.content_type == 'text/csv'
+    return if csv_file.content_type == CSV_CONTENT_TYPE
 
-    add_error :csv_file_invalid_extension
+    add_error :invalid_extension
   end
 
   def valid_count
-    return if CSV.read(csv_file.tempfile).count.between?(1, 1000)
+    return if CSV.read(csv_file.tempfile).count.between?(CSV_COUNT_MIN, CSV_COUNT_MAX)
 
-    add_error :csv_file_invalid_count
+    add_error :invalid_count
   end
 
   def add_error(type)
-    errors.add(:base, I18n.t("upload_form.validation.#{type}"))
+    errors.add(:base, I18n.t("activemodel.errors.models.search_result.attributes.csv_file.#{type}"))
   end
 
   def save

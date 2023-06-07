@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Search Results Endpoint', type: :request do
+RSpec.describe 'Search Results', type: :request do
   describe 'POST #create' do
     context 'given a valid search engine and csv file' do
       it 'returns a successful response with JSON' do
@@ -12,7 +12,7 @@ RSpec.describe 'Search Results Endpoint', type: :request do
         }
 
         expect(JSON.parse(response.body)['data'][0]['type']).to eq('search_results')
-        expect(JSON.parse(response.body)['meta']['message']).to eq(I18n.t('upload_form.upload_success'))
+        expect(JSON.parse(response.body)['meta']['message']).to eq(I18n.t('activemodel.notices.models.search_result.create'))
         expect(response).to have_http_status(:created)
       end
     end

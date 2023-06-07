@@ -31,8 +31,3 @@
 
 en:
   hello: "Hello world"
-  upload_form:
-    upload_success: "Upload success, please wait for the results."
-    validation:
-      csv_file_invalid_extension: "CSV file is invalid, must have .csv extension."
-      csv_file_invalid_count: "CSV file is invalid, must have 1-1000 keywords."
