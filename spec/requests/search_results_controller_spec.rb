@@ -17,7 +17,7 @@ RSpec.describe 'Search Results', type: :request do
       end
     end
 
-    context 'given an empty search engine' do
+    context 'given NO search engine' do
       it 'returns an unsuccessful response with JSON' do
         post '/api/v1/upload', params: {
           search_engine: nil,
@@ -29,7 +29,7 @@ RSpec.describe 'Search Results', type: :request do
       end
     end
 
-    context 'given an invalid search engine' do
+    context 'given INVALID search engine' do
       it 'returns an unsuccessful response with JSON' do
         post '/api/v1/upload', params: {
           search_engine: 'yahoo',
@@ -41,7 +41,7 @@ RSpec.describe 'Search Results', type: :request do
       end
     end
 
-    context 'given an empty csv file' do
+    context 'given NO csv file' do
       it 'returns an unsuccessful response with JSON' do
         post '/api/v1/upload', params: {
           search_engine: 'google',
@@ -53,7 +53,7 @@ RSpec.describe 'Search Results', type: :request do
       end
     end
 
-    context 'given an invalid file extension' do
+    context 'given INVALID file extension' do
       it 'returns an unsuccessful response with JSON' do
         post '/api/v1/upload', params: {
           search_engine: 'google',
@@ -65,7 +65,7 @@ RSpec.describe 'Search Results', type: :request do
       end
     end
 
-    context 'given an invalid file count' do
+    context 'given INVALID file count' do
       it 'returns an unsuccessful response with JSON' do
         post '/api/v1/upload', params: {
           search_engine: 'google',

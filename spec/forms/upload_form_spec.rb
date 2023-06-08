@@ -15,7 +15,7 @@ RSpec.describe UploadForm, type: :model do
       end
     end
 
-    context 'given search_engine is missing' do
+    context 'given NO search engine' do
       it 'is invalid' do
         upload_form = described_class.new(
           search_engine: nil,
@@ -27,7 +27,7 @@ RSpec.describe UploadForm, type: :model do
       end
     end
 
-    context 'given search_engine is invalid' do
+    context 'given INVALID search engine' do
       it 'is invalid' do
         upload_form = described_class.new(
           search_engine: 'yahoo',
@@ -39,7 +39,7 @@ RSpec.describe UploadForm, type: :model do
       end
     end
 
-    context 'given csv_file is missing' do
+    context 'given NO csv file' do
       it 'is invalid' do
         upload_form = described_class.new(
           search_engine: 'google',
@@ -51,7 +51,7 @@ RSpec.describe UploadForm, type: :model do
       end
     end
 
-    context 'given csv_file has an invalid content type' do
+    context 'given INVALID content type for csv file' do
       it 'is invalid' do
         upload_form = described_class.new(
           search_engine: 'google',
@@ -59,11 +59,11 @@ RSpec.describe UploadForm, type: :model do
         )
 
         expect(upload_form).not_to be_valid
-        expect(upload_form.errors[:base]).to eq([I18n.t('activemodel.errors.models.search_result.attributes.csv_file.invalid_extension')])
+        expect(upload_form.errors[:csv_file]).to eq([I18n.t('activemodel.errors.models.upload_form.attributes.csv_file.invalid_extension')])
       end
     end
 
-    context 'given csv_file has an invalid count' do
+    context 'given INVALID count for csv file' do
       it 'is invalid' do
         upload_form = described_class.new(
           search_engine: 'google',
@@ -71,7 +71,7 @@ RSpec.describe UploadForm, type: :model do
         )
 
         expect(upload_form).not_to be_valid
-        expect(upload_form.errors[:base]).to eq([I18n.t('activemodel.errors.models.search_result.attributes.csv_file.invalid_count')])
+        expect(upload_form.errors[:csv_file]).to eq([I18n.t('activemodel.errors.models.upload_form.attributes.csv_file.invalid_count')])
       end
     end
   end
@@ -88,7 +88,7 @@ RSpec.describe UploadForm, type: :model do
       end
     end
 
-    context 'given any attribute is invalid' do
+    context 'given any attribute is INVALID' do
       it 'does not create search results' do
         upload_form = described_class.new(
           search_engine: 'yahoo',
