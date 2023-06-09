@@ -8,6 +8,7 @@ module Api
           search_engine: upload_form_params[:search_engine],
           csv_file: upload_form_params[:csv_file]
         )
+
         if upload_form.valid?
           search_results = upload_form.save
           render_success(search_results)
@@ -25,6 +26,7 @@ module Api
       def render_success(search_results)
         data = SearchResultsSerializer.new(search_results).serializable_hash[:data]
         message = I18n.t('activemodel.notices.models.search_result.create')
+
         render json: { data: data, meta: { message: message } }, status: :created
       end
 
