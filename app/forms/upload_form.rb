@@ -15,8 +15,8 @@ class UploadForm
   validates :search_engine, inclusion: { in: SearchResult.search_engines.keys }
   validates :csv_file, presence: true
 
-  validate :validate_content_type, if: -> { csv_file.present? }
-  validate :validate_count, if: -> { errors.empty? && csv_file.present? }
+  validate :csv_file_content_type, if: -> { csv_file.present? }
+  validate :keyword_count, if: -> { csv_file.present? && csv? }
 
   def initialize(search_engine:, csv_file:)
     @search_engine = search_engine
@@ -35,13 +35,17 @@ class UploadForm
 
   private
 
-  def validate_content_type
-    return if csv_file.content_type == CSV_CONTENT_TYPE
+  def csv_file_content_type
+    return if csv?
 
     errors.add(:csv_file, :invalid_extension)
   end
 
-  def validate_count
+  def csv?
+    csv_file.content_type == CSV_CONTENT_TYPE
+  end
+
+  def keyword_count
     return if CSV.read(csv_file.tempfile).count.between?(CSV_COUNT_MIN, CSV_COUNT_MAX)
 
     errors.add(:csv_file, :invalid_count)
