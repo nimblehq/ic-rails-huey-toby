@@ -1,0 +1,13 @@
+en:
+  activemodel: 
+    notices:
+      models:
+        search_result:
+          create: "Upload success, please wait for the results."
+    errors:
+      models:
+        upload_form:
+          attributes:
+            csv_file:
+              invalid_extension: "is invalid, must have .csv extension."
+              invalid_count: "is invalid, must have 1-1000 keywords."

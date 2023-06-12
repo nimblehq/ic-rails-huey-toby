@@ -10,7 +10,7 @@ VCR.configure do |c|
   c.ignore_request do |request|
     URI(request.uri).port == 9200
   end
-  c.default_cassette_options = { record: :none, match_requests_on: [:path] }
+  c.default_cassette_options = { record: :once, match_requests_on: [:path] }
 end
 
 RSpec.configure do |config|

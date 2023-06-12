@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe 'Health Endpoint', type: :request do
   describe 'GET #show' do
-    context 'when the application is up' do
+    context 'given the application is up' do
       it 'returns a successful response with HTML' do
         get '/'
 
@@ -20,7 +20,7 @@ RSpec.describe 'Health Endpoint', type: :request do
       end
     end
 
-    context 'when the application is down' do
+    context 'given the application is down' do
       it 'returns an internal server error response with HTML' do
         controller_instance = HealthController.new
         allow(HealthController).to receive(:new).and_return(controller_instance)
