@@ -13,9 +13,9 @@ module Search
 
       response = Faraday.get(uri)
 
-      # TODO: Handle error in background job
-      # https://github.com/nimblehq/ic-rails-huey-toby/issues/19
       response.body if response.status == 200
+    rescue Faraday::ConnectionFailed
+      raise
     end
   end
 end

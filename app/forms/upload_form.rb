@@ -29,8 +29,15 @@ class UploadForm
 
     search_results = keywords.map { |keyword| SearchResult.new(keyword: keyword, search_engine: search_engine) }
     SearchResult.import search_results
+    process_results(search_results)
 
     search_results
+  end
+
+  def process_results(search_results)
+    search_results.each do |search_result|
+      SearchKeywordJob.perform_later(search_result)
+    end
   end
 
   private
