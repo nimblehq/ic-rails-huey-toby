@@ -3,6 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe UploadForm, type: :model do
+  include ActiveJob::TestHelper
+
   describe '#valid?' do
     context 'given valid attributes' do
       it 'is valid' do
@@ -78,24 +80,24 @@ RSpec.describe UploadForm, type: :model do
 
   describe '#save' do
     context 'given valid attributes' do
-      it 'creates search results' do
+      it 'runs search keyword jobs' do
         upload_form = described_class.new(
           search_engine: 'google',
           csv_file: fixture_file_upload('upload_valid.csv', 'text/csv')
         )
 
-        expect { upload_form.save }.to change(SearchResult, :count).by(6)
+        expect { upload_form.save }.to have_enqueued_job(SearchKeywordJob).exactly(6).times
       end
     end
 
     context 'given any attribute is INVALID' do
-      it 'does not create search results' do
+      it 'does not run search keyword jobs' do
         upload_form = described_class.new(
           search_engine: 'yahoo',
           csv_file: fixture_file_upload('upload_valid.csv', 'text/csv')
         )
 
-        expect { upload_form.save }.not_to change(SearchResult, :count)
+        expect { upload_form.save }.to raise_error(ActiveJob::SerializationError)
       end
     end
   end
