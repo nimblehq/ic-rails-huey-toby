@@ -91,13 +91,13 @@ RSpec.describe UploadForm, type: :model do
     end
 
     context 'given any attribute is INVALID' do
-      it 'does not run search keyword jobs' do
+      it 'raises an error' do
         upload_form = described_class.new(
           search_engine: 'yahoo',
           csv_file: fixture_file_upload('upload_valid.csv', 'text/csv')
         )
 
-        expect { upload_form.save }.to raise_error(ActiveJob::SerializationError)
+        expect { upload_form.save }.to raise_error(ActiveRecord::RecordInvalid)
       end
     end
   end

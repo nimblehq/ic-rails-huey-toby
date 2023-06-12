@@ -12,7 +12,7 @@ RSpec.describe SearchKeywordJob, type: :job do
 
         expect(search_result.status).to eq('in_progress')
 
-        expect { described_class.perform_now(search_result) }
+        expect { described_class.perform_now(search_result.id) }
           .to change { search_result.reload.status }
           .to('completed').and change { search_result.html_code }
           .to(include('<title>ruby - Google Search</title>'))
@@ -26,7 +26,7 @@ RSpec.describe SearchKeywordJob, type: :job do
         allow(Search::SearchService).to receive(:new).and_return(search_service)
         allow(search_service).to receive(:search).and_raise(Faraday::ConnectionFailed.new('error'))
 
-        expect { described_class.perform_now(search_result) }.to change { search_result.reload.status }.to('failed')
+        expect { described_class.perform_now(search_result.id) }.to change { search_result.reload.status }.to('failed')
       end
     end
 
@@ -37,7 +37,7 @@ RSpec.describe SearchKeywordJob, type: :job do
         allow(Search::SearchService).to receive(:new).and_return(search_service)
         allow(search_service).to receive(:search).and_return(nil)
 
-        expect { described_class.perform_now(search_result) }.to change { search_result.reload.status }.to('failed')
+        expect { described_class.perform_now(search_result.id) }.to change { search_result.reload.status }.to('failed')
       end
     end
 
@@ -48,7 +48,7 @@ RSpec.describe SearchKeywordJob, type: :job do
         allow(Search::SearchService).to receive(:new).and_return(search_service)
         allow(search_service).to receive(:search).and_raise(NotImplementedError.new('error'))
 
-        expect { described_class.perform_now(search_result) }.to change { search_result.reload.status }.to('failed')
+        expect { described_class.perform_now(search_result.id) }.to change { search_result.reload.status }.to('failed')
       end
     end
   end
