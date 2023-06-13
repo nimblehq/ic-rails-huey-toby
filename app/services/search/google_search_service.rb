@@ -21,5 +21,42 @@ module Search
     rescue Faraday::ConnectionFailed
       raise IcRailsHueyToby::Errors::SearchServiceError
     end
+
+    private
+
+    def parse_html
+      doc = Nokogiri::HTML(@raw_html)
+      parse_adwords(doc)
+      parse_non_adwords(doc)
+    end
+
+    def parse_adwords(doc)
+      parse_top_adwords(doc)
+      parse_normal_adwords(doc)
+    end
+
+    def parse_top_adwords(doc)
+      top_ads_container = doc.css('div.pla-unit-container')
+
+      @adwords_top_urls = []
+      top_ads_container.each do |adwords_top|
+        @adwords_top_urls << adwords_top.css('a[data-impdclcc]').first['href']
+      end
+
+      @adwords_top_count = adwords_top_urls.size
+    end
+
+    def parse_normal_adwords(doc)
+      normal_adwords_count = doc.css('div[data-text-ad]').count
+
+      @adwords_total_count = @adwords_top_count + normal_adwords_count
+    end
+
+    def parse_non_adwords(doc)
+      @non_adwords_urls = []
+      doc.css('#search').css('div.yuRUbf').each do |non_adwords|
+        @non_adwords_urls << non_adwords.css('a').first['href']
+      end
+    end
   end
 end
