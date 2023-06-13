@@ -433,6 +433,7 @@ DEPENDENCIES
   letter_opener
   listen
   mini_magick
+  nokogiri
   pagy
   parser (= 3.0.1.1)
   pg
