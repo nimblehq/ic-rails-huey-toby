@@ -10,10 +10,20 @@ class SearchKeywordJob < ApplicationJob
       search_engine: search_result.search_engine
     ).search
 
-    raise IcRailsHueyToby::Errors::ClientServiceError unless html_code
+    return mark_as_failed(search_result) unless html_code
 
+    mark_as_completed(search_result, html_code)
+  rescue IcRailsHueyToby::Errors::SearchServiceError
+    mark_as_failed(search_result)
+  end
+
+  private
+
+  def mark_as_completed(search_result, html_code)
     search_result.update html_code: html_code, status: :completed
-  rescue Faraday::ConnectionFailed, IcRailsHueyToby::Errors::ClientServiceError, NotImplementedError
+  end
+
+  def mark_as_failed(search_result)
     search_result.update status: :failed
   end
 end

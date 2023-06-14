@@ -7,7 +7,7 @@ module Search
       when :google
         Search::GoogleSearchService.new(keyword, language)
       else
-        raise NotImplementedError
+        raise IcRailsHueyToby::Errors::SearchServiceError
       end
     end
   end

@@ -12,6 +12,6 @@ module IcRailsHueyToby
       end
     end
 
-    class ClientServiceError < StandardError; end
+    class SearchServiceError < StandardError; end
   end
 end

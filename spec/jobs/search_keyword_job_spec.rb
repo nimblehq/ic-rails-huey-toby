@@ -19,18 +19,7 @@ RSpec.describe SearchKeywordJob, type: :job do
       end
     end
 
-    context 'given Faraday::ConnectionFailed is raised' do
-      it 'updates the keyword status as failed' do
-        search_result = SearchResult.create(keyword: 'keyword', search_engine: 'google')
-        search_service = Search::SearchService.new(keyword: 'keyword', search_engine: 'google')
-        allow(Search::SearchService).to receive(:new).and_return(search_service)
-        allow(search_service).to receive(:search).and_raise(Faraday::ConnectionFailed.new('error'))
-
-        expect { described_class.perform_now(search_result.id) }.to change { search_result.reload.status }.to('failed')
-      end
-    end
-
-    context 'given ClientServiceError is raised' do
+    context 'given NO html code is returned' do
       it 'updates the keyword status as failed' do
         search_result = SearchResult.create(keyword: 'keyword', search_engine: 'google')
         search_service = Search::SearchService.new(keyword: 'keyword', search_engine: 'google')
@@ -41,12 +30,12 @@ RSpec.describe SearchKeywordJob, type: :job do
       end
     end
 
-    context 'given NotImplementedError is raised' do
+    context 'given SearchServiceError is raised' do
       it 'updates the keyword status as failed' do
         search_result = SearchResult.create(keyword: 'keyword', search_engine: 'google')
         search_service = Search::SearchService.new(keyword: 'keyword', search_engine: 'google')
         allow(Search::SearchService).to receive(:new).and_return(search_service)
-        allow(search_service).to receive(:search).and_raise(NotImplementedError.new('error'))
+        allow(search_service).to receive(:search).and_raise(IcRailsHueyToby::Errors::SearchServiceError)
 
         expect { described_class.perform_now(search_result.id) }.to change { search_result.reload.status }.to('failed')
       end

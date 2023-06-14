@@ -15,7 +15,7 @@ module Search
 
       response.body if response.status == 200
     rescue Faraday::ConnectionFailed
-      raise
+      raise IcRailsHueyToby::Errors::SearchServiceError
     end
   end
 end

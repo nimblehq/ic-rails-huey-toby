@@ -13,7 +13,7 @@ RSpec.describe Search::SearchService, type: :service do
 
     context 'given the search engine is INVALID' do
       it 'raises an error' do
-        expect { described_class.new(search_engine: 'yahoo', keyword: 'ruby') }.to raise_error(NotImplementedError)
+        expect { described_class.new(search_engine: 'yahoo', keyword: 'ruby') }.to raise_error(IcRailsHueyToby::Errors::SearchServiceError)
       end
     end
   end
