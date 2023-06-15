@@ -3,3 +3,8 @@
 :queues:
   - [default, 1]
   - [mailers, 2]
+  - [scrapers, 3]
+
+development:
+  :queues:
+    - [development_scrapers, 3]
