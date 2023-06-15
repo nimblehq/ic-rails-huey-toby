@@ -1,11 +1,13 @@
 # frozen_string_literal: true
 
+require 'user_agent_randomizer'
+
 module Search
   class GoogleSearchService
     GOOGLE_SEARCH_URL = 'https://www.google.com/search?q=%{keyword}&hl=%{language}&lr=%{language}'
 
     USER_AGENT_HEADER = 'User-Agent'
-    USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36'
+    USER_AGENT_TYPE = 'desktop_browser'
 
     KEY_DIV_TOP_ADWORDS_CONTAINER = 'div.pla-unit-container'
     KEY_DIV_NORMAL_ADWORDS_CONTAINER = 'div.v5yQqb'
@@ -13,7 +15,6 @@ module Search
 
     KEY_A_TAG = 'a'
     KEY_A_TAG_ADWORDS_TOP_CLASS = 'a[data-impdclcc]'
-    KEY_A_TAG_HYPERLINK = 'a[href]'
 
     KEY_HREF_ATTRIBUTE = 'href'
 
@@ -24,7 +25,7 @@ module Search
     def search
       uri = URI.parse(@search_url)
 
-      response = Faraday.get(uri, nil, USER_AGENT_HEADER => USER_AGENT)
+      response = Faraday.get(uri, nil, USER_AGENT_HEADER => generate_user_agent)
 
       @html_code = response.body if response.status == 200
 
@@ -34,6 +35,10 @@ module Search
     end
 
     private
+
+    def generate_user_agent
+      UserAgentRandomizer::UserAgent.fetch(type: USER_AGENT_TYPE).string
+    end
 
     # rubocop:disable Metrics/MethodLength
     def parse_html(html_code)
@@ -47,7 +52,7 @@ module Search
       adwords_normal_count = adwords_normal_urls.size
       adwords_total_count = adwords_top_count + adwords_normal_count
       non_adwords_count = non_adwords_urls.size
-      total_links_count = parse_all_links(doc)
+      total_links_count = adwords_top_count + adwords_normal_count + non_adwords_count
 
       SearchResult.new(
         adwords_top_urls: adwords_top_urls,
@@ -56,7 +61,7 @@ module Search
         non_adwords_count: non_adwords_count,
         adwords_total_count: adwords_total_count,
         total_links_count: total_links_count,
-        html_code: html_code,
+        # html_code: html_code,
         search_engine: 'google',
         keyword: @keyword
       )
@@ -93,10 +98,6 @@ module Search
       end
 
       non_adwords_urls
-    end
-
-    def parse_all_links(doc)
-      doc.css(KEY_A_TAG_HYPERLINK).size
     end
   end
 end
