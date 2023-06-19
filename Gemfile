@@ -25,7 +25,7 @@ gem 'pundit' # Minimal authorization through OO design and pure Ruby classes
 
 # Scraping web content
 gem 'nokogiri' # HTML, XML, SAX, and Reader parser
-gem 'user-agent-randomizer' # Randomize user agent
+gem 'ronin-web-user_agents' # User agent generator
 
 # Translations
 # gem 'devise-i18n' # Translations for Devise
