@@ -8,14 +8,45 @@ RSpec.describe SearchKeywordJob, type: :job do
   describe '#perform' do
     context 'given a valid request' do
       it 'updates the keyword status as completed', vcr: 'services/search/google/valid' do
-        search_result = SearchResult.create(keyword: 'ruby', search_engine: 'google')
+        search_result = SearchResult.create(keyword: 'tivi', search_engine: 'google')
 
         expect(search_result.status).to eq('in_progress')
 
         expect { described_class.perform_now(search_result.id) }
           .to change { search_result.reload.status }
           .to('completed').and change { search_result.html_code }
-          .to(include('<title>ruby - Google Search</title>'))
+          .to(include('<title>tivi - Google Search</title>'))
+      end
+
+      it 'updates the adwords_top_urls correctly', vcr: 'services/search/google/valid' do
+        search_result = SearchResult.create(keyword: 'tivi', search_engine: 'google')
+
+        expect { described_class.perform_now(search_result.id) }
+          .to change { search_result.reload.adwords_top_urls }
+          .to([
+                'https://mihanoi.vn/san-pham/smart-tivi-xiaomi-a2-32-inch-chinh-hang',
+                'https://hc.com.vn/ords/p--tivi-samsung-ua65au7000',
+                'https://www.samsung.com/vn/tvs/uhd-4k-tv/au7000-uhd-4k-smart-tv-55-inch-ua55au7000kxxv/',
+                'https://hc.com.vn/ords/p--tivi-lg-43up7550ptc'
+              ])
+      end
+
+      it 'updates the non_adwords_urls correctly', vcr: 'services/search/google/valid' do
+        search_result = SearchResult.create(keyword: 'tivi', search_engine: 'google')
+
+        expect { described_class.perform_now(search_result.id) }
+          .to change { search_result.reload.non_adwords_urls }
+          .to([
+                'https://www.dienmayxanh.com/tivi',
+                'https://www.nguyenkim.com/tivi/',
+                'https://dienmaycholon.vn/tivi',
+                'https://cellphones.com.vn/tivi.html',
+                'https://mediamart.vn/tivi',
+                'https://hc.com.vn/ords/c--tivi',
+                'https://tiki.vn/tivi/c5015',
+                'https://pico.vn/tivi-nhom-157.html',
+                'https://dienmaygiare.net/tivi/'
+              ])
       end
     end
 
