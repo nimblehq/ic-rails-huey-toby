@@ -3,5 +3,5 @@
 class SearchResultsSerializer
   include JSONAPI::Serializer
 
-  attributes :keyword, :search_engine
+  attributes :keyword, :search_engine, :status
 end

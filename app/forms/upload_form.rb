@@ -27,13 +27,23 @@ class UploadForm
     content = csv_file.read
     keywords = CSV.parse(content).flatten.map(&:strip)
 
-    search_results = keywords.map { |keyword| SearchResult.new(keyword: keyword, search_engine: search_engine) }
-    SearchResult.import search_results
-
-    search_results
+    keywords
+      .map { |keyword| SearchResult.new(keyword: keyword, search_engine: search_engine) }
+      .tap { |results| save_search_results(results) }
+      .tap { |results| scrape_search_results(results) }
   end
 
   private
+
+  def save_search_results(results)
+    SearchResult.import(results, raise_error: true)
+  end
+
+  def scrape_search_results(results)
+    results.map(&:id).each do |id|
+      SearchKeywordJob.perform_later(id)
+    end
+  end
 
   def csv_file_content_type
     return if csv?

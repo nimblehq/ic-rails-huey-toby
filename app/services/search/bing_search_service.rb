@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 module Search
-  class GoogleSearchService
-    GOOGLE_SEARCH_URL = 'https://www.google.com/search?q=%{keyword}&hl=%{language}&lr=%{language}'
+  class BingSearchService
+    BING_SEARCH_URL = 'https://www.bing.com/search?q=%{keyword}&setlang=%{language}'
 
     def initialize(keyword, language = 'en')
-      @search_url = format(GOOGLE_SEARCH_URL, keyword: keyword, language: language)
+      @search_url = format(BING_SEARCH_URL, keyword: keyword, language: language)
     end
 
     def search
@@ -15,7 +15,7 @@ module Search
 
       response.body if response.status == 200
     rescue Faraday::ConnectionFailed
-      raise IcRailsHueyToby::Errors::SearchServiceError
+      raise IcRailsHueyToby::Errors::ClientServiceError
     end
   end
 end

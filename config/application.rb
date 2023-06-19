@@ -45,5 +45,10 @@ module IcRailsHueyToby
 
     # Compress the responses to reduce the size of html/json controller responses.
     config.middleware.use Rack::Deflater
+
+    # This is required for an API app to enable the Sidekiq dashboard
+    config.session_store :cookie_store, key: '_interslice_session'
+    config.middleware.use ActionDispatch::Cookies
+    config.middleware.use config.session_store, config.session_options
   end
 end
