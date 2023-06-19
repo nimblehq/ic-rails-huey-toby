@@ -31,6 +31,22 @@ RSpec.describe SearchKeywordJob, type: :job do
               ])
       end
 
+      it 'updates the adwords_top_count correctly', vcr: 'services/search/google/valid' do
+        search_result = SearchResult.create(keyword: 'tivi', search_engine: 'google')
+
+        expect { described_class.perform_now(search_result.id) }
+          .to change { search_result.reload.adwords_top_count }
+          .to(4)
+      end
+
+      it 'updates the adwords_total_count correctly', vcr: 'services/search/google/valid' do
+        search_result = SearchResult.create(keyword: 'tivi', search_engine: 'google')
+
+        expect { described_class.perform_now(search_result.id) }
+          .to change { search_result.reload.adwords_total_count }
+          .to(4)
+      end
+
       it 'updates the non_adwords_urls correctly', vcr: 'services/search/google/valid' do
         search_result = SearchResult.create(keyword: 'tivi', search_engine: 'google')
 
@@ -47,6 +63,22 @@ RSpec.describe SearchKeywordJob, type: :job do
                 'https://pico.vn/tivi-nhom-157.html',
                 'https://dienmaygiare.net/tivi/'
               ])
+      end
+
+      it 'updates the non_adwords_count correctly', vcr: 'services/search/google/valid' do
+        search_result = SearchResult.create(keyword: 'tivi', search_engine: 'google')
+
+        expect { described_class.perform_now(search_result.id) }
+          .to change { search_result.reload.non_adwords_count }
+          .to(9)
+      end
+
+      it 'updates the total_links_count correctly', vcr: 'services/search/google/valid' do
+        search_result = SearchResult.create(keyword: 'tivi', search_engine: 'google')
+
+        expect { described_class.perform_now(search_result.id) }
+          .to change { search_result.reload.total_links_count }
+          .to(13)
       end
     end
 

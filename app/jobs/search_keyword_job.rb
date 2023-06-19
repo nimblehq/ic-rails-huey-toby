@@ -33,7 +33,9 @@ class SearchKeywordJob < ApplicationJob
 
   def mark_as_completed(search_result, html_code, result)
     search_result.update html_code: html_code, adwords_top_urls: result[:adwords_top_urls],
-                         non_adwords_urls: result[:non_adwords_urls], status: :completed
+                         adwords_top_count: result[:adwords_top_count], adwords_total_count: result[:adwords_total_count],
+                         non_adwords_urls: result[:non_adwords_urls], non_adwords_count: result[:non_adwords_count],
+                         total_links_count: result[:total_links_count], status: :completed
   end
 
   def mark_as_failed(search_result)

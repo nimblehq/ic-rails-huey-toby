@@ -19,14 +19,30 @@ module Parse
 
     private
 
+    # rubocop:disable Metrics/MethodLength
     def parse_html(html_code)
       doc = Nokogiri::HTML(html_code)
+
+      adwords_top_urls = parse_top_adwords(doc)
+      adwords_body_urls = parse_body_adwords(doc)
+      non_adwords_urls = parse_non_adwords(doc)
+
+      adwords_top_count = adwords_top_urls.count
+      adwords_body_count = adwords_body_urls.count
+      adwords_total_count = adwords_top_count + adwords_body_count
+      non_adwords_count = non_adwords_urls.count
+      total_links_count = adwords_total_count + non_adwords_count
+
       {
-        adwords_top_urls: parse_top_adwords(doc),
-        adwords_body_urls: parse_body_adwords(doc),
-        non_adwords_urls: parse_non_adwords(doc)
+        adwords_top_urls: adwords_top_urls,
+        adwords_top_count: adwords_top_count,
+        adwords_total_count: adwords_total_count,
+        non_adwords_urls: non_adwords_urls,
+        non_adwords_count: non_adwords_count,
+        total_links_count: total_links_count
       }
     end
+    # rubocop:enable Metrics/MethodLength
 
     def parse_top_adwords(doc)
       top_ads_container = doc.css(SELECTORS[:adwords_top])
