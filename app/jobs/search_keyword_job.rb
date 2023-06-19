@@ -6,12 +6,11 @@ class SearchKeywordJob < ApplicationJob
   def perform(search_result_id)
     search_result = SearchResult.find(search_result_id)
     html_code = search(search_result.keyword, search_result.search_engine)
+
     result = parse(search_result.search_engine, html_code)
 
-    return mark_as_failed(search_result) unless html_code
-
     mark_as_completed(search_result, html_code, result)
-  rescue IcRailsHueyToby::Errors::SearchServiceError
+  rescue IcRailsHueyToby::Errors::SearchServiceError, IcRailsHueyToby::Errors::ParseServiceError
     mark_as_failed(search_result)
   end
 

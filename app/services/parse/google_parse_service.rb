@@ -11,16 +11,19 @@ module Parse
 
     def initialize(html_code)
       @html_code = html_code
+      raise IcRailsHueyToby::Errors::ParseServiceError unless html_code
     end
 
     def parse
-      parse_html(@html_code)
+      parse_html
     end
 
     private
 
+    attr_reader :html_code
+
     # rubocop:disable Metrics/MethodLength
-    def parse_html(html_code)
+    def parse_html
       doc = Nokogiri::HTML(html_code)
 
       adwords_top_urls = parse_top_adwords(doc)
