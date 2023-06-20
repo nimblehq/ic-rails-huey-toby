@@ -46,7 +46,7 @@ RSpec/ContextWording:
     - given
 
 RSpec/ExampleLength:
-  Enabled: false
+  Max: 30
 
 RSpec/NestedGroups:
   Max: 5
