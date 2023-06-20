@@ -22,30 +22,15 @@ module Parse
 
     attr_reader :html_code
 
-    # rubocop:disable Metrics/MethodLength
     def parse_html
       doc = Nokogiri::HTML(html_code)
 
-      adwords_top_urls = parse_top_adwords(doc)
-      adwords_body_urls = parse_body_adwords(doc)
-      non_adwords_urls = parse_non_adwords(doc)
+      adwords_result = parse_adwords(doc)
+      non_adwords_result = parse_non_adwords(doc)
+      total_links_count = parse_total_links_count(adwords_result, non_adwords_result)
 
-      adwords_top_count = adwords_top_urls.count
-      adwords_body_count = adwords_body_urls.count
-      adwords_total_count = adwords_top_count + adwords_body_count
-      non_adwords_count = non_adwords_urls.count
-      total_links_count = adwords_total_count + non_adwords_count
-
-      {
-        adwords_top_urls: adwords_top_urls,
-        adwords_top_count: adwords_top_count,
-        adwords_total_count: adwords_total_count,
-        non_adwords_urls: non_adwords_urls,
-        non_adwords_count: non_adwords_count,
-        total_links_count: total_links_count
-      }
+      adwords_result.merge(non_adwords_result, { total_links_count: total_links_count })
     end
-    # rubocop:enable Metrics/MethodLength
 
     def parse_top_adwords(doc)
       top_ads_container = doc.css(SELECTORS[:adwords_top])
@@ -59,10 +44,35 @@ module Parse
       parse_url(body_ads_container)
     end
 
+    def parse_adwords(doc)
+      adwords_top_urls = parse_top_adwords(doc)
+      adwords_body_urls = parse_body_adwords(doc)
+
+      adwords_top_count = adwords_top_urls.count
+      adwords_body_count = adwords_body_urls.count
+      adwords_total_count = adwords_top_count + adwords_body_count
+
+      {
+        adwords_top_urls: adwords_top_urls,
+        adwords_top_count: adwords_top_count,
+        adwords_total_count: adwords_total_count
+      }
+    end
+
     def parse_non_adwords(doc)
       non_adwords_container = doc.css(SELECTORS[:non_adwords])
 
-      parse_url(non_adwords_container)
+      non_adwords_urls = parse_url(non_adwords_container)
+      non_adwords_count = non_adwords_urls.count
+
+      {
+        non_adwords_urls: non_adwords_urls,
+        non_adwords_count: non_adwords_count
+      }
+    end
+
+    def parse_total_links_count(adwords_result, non_adwords_result)
+      adwords_result[:adwords_total_count] + non_adwords_result[:non_adwords_count]
     end
 
     def parse_url(container)
