@@ -9,7 +9,7 @@ class SearchKeywordJob < ApplicationJob
 
     result = parse(search_result.search_engine, html_code)
 
-    mark_as_completed(search_result, html_code, result)
+    set_parsing_result(search_result, html_code, result)
   rescue IcRailsHueyToby::Errors::SearchServiceError, IcRailsHueyToby::Errors::ParseServiceError
     mark_as_failed(search_result)
   end
@@ -30,11 +30,13 @@ class SearchKeywordJob < ApplicationJob
     ).parse
   end
 
-  def mark_as_completed(search_result, html_code, result)
-    search_result.update html_code: html_code, adwords_top_urls: result[:adwords_top_urls],
-                         adwords_top_count: result[:adwords_top_count], adwords_total_count: result[:adwords_total_count],
-                         non_adwords_urls: result[:non_adwords_urls], non_adwords_count: result[:non_adwords_count],
-                         total_links_count: result[:total_links_count], status: :completed
+  def set_parsing_result(search_result, html_code, result)
+    search_result.update result.merge({ html_code: html_code })
+    mark_as_completed(search_result)
+  end
+
+  def mark_as_completed(search_result)
+    search_result.update status: :completed
   end
 
   def mark_as_failed(search_result)
