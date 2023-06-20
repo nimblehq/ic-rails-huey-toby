@@ -18,7 +18,7 @@ RSpec.describe SearchKeywordJob, type: :job do
           .to(include('<title>tivi - Google Search</title>'))
       end
 
-      it 'updates the adwords_top_urls correctly', vcr: 'services/search/google/valid' do
+      it 'updates the adwords_top_urls with the parsed content from the search page', vcr: 'services/search/google/valid' do
         search_result = SearchResult.create(keyword: 'tivi', search_engine: 'google')
 
         expect { described_class.perform_now(search_result.id) }
@@ -31,7 +31,7 @@ RSpec.describe SearchKeywordJob, type: :job do
               ])
       end
 
-      it 'updates the adwords_top_count correctly', vcr: 'services/search/google/valid' do
+      it 'updates the adwords_top_count with the parsed content from the search page', vcr: 'services/search/google/valid' do
         search_result = SearchResult.create(keyword: 'tivi', search_engine: 'google')
 
         expect { described_class.perform_now(search_result.id) }
@@ -39,7 +39,7 @@ RSpec.describe SearchKeywordJob, type: :job do
           .to(4)
       end
 
-      it 'updates the adwords_total_count correctly', vcr: 'services/search/google/valid' do
+      it 'updates the adwords_total_count with the parsed content from the search page', vcr: 'services/search/google/valid' do
         search_result = SearchResult.create(keyword: 'tivi', search_engine: 'google')
 
         expect { described_class.perform_now(search_result.id) }
@@ -47,7 +47,7 @@ RSpec.describe SearchKeywordJob, type: :job do
           .to(4)
       end
 
-      it 'updates the non_adwords_urls correctly', vcr: 'services/search/google/valid' do
+      it 'updates the non_adwords_urls with the parsed content from the search page', vcr: 'services/search/google/valid' do
         search_result = SearchResult.create(keyword: 'tivi', search_engine: 'google')
 
         expect { described_class.perform_now(search_result.id) }
@@ -65,7 +65,7 @@ RSpec.describe SearchKeywordJob, type: :job do
               ])
       end
 
-      it 'updates the non_adwords_count correctly', vcr: 'services/search/google/valid' do
+      it 'updates the non_adwords_count with the parsed content from the search page', vcr: 'services/search/google/valid' do
         search_result = SearchResult.create(keyword: 'tivi', search_engine: 'google')
 
         expect { described_class.perform_now(search_result.id) }
@@ -73,7 +73,7 @@ RSpec.describe SearchKeywordJob, type: :job do
           .to(9)
       end
 
-      it 'updates the total_links_count correctly', vcr: 'services/search/google/valid' do
+      it 'updates the total_links_count with the parsed content from the search page', vcr: 'services/search/google/valid' do
         search_result = SearchResult.create(keyword: 'tivi', search_engine: 'google')
 
         expect { described_class.perform_now(search_result.id) }
