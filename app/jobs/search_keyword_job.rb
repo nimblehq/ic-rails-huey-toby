@@ -31,15 +31,15 @@ class SearchKeywordJob < ApplicationJob
   end
 
   def set_parse_result(search_result, html_code, parse_result)
-    search_result.update parse_result.merge({ html_code: html_code })
+    search_result.update(parse_result.merge({ html_code: html_code }))
     mark_as_completed(search_result)
   end
 
   def mark_as_completed(search_result)
-    search_result.update status: :completed
+    search_result.update(status: :completed)
   end
 
   def mark_as_failed(search_result)
-    search_result.update status: :failed
+    search_result.update(status: :failed)
   end
 end
