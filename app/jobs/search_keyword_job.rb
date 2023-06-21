@@ -7,9 +7,9 @@ class SearchKeywordJob < ApplicationJob
     search_result = SearchResult.find(search_result_id)
     html_code = search(search_result.keyword, search_result.search_engine)
 
-    result = parse(search_result.search_engine, html_code)
+    parse_result = parse(search_result.search_engine, html_code)
 
-    set_parsing_result(search_result, html_code, result)
+    set_parse_result(search_result, html_code, parse_result)
   rescue IcRailsHueyToby::Errors::SearchServiceError, IcRailsHueyToby::Errors::ParseServiceError
     mark_as_failed(search_result)
   end
@@ -30,8 +30,8 @@ class SearchKeywordJob < ApplicationJob
     ).parse
   end
 
-  def set_parsing_result(search_result, html_code, result)
-    search_result.update result.merge({ html_code: html_code })
+  def set_parse_result(search_result, html_code, parse_result)
+    search_result.update parse_result.merge({ html_code: html_code })
     mark_as_completed(search_result)
   end
 

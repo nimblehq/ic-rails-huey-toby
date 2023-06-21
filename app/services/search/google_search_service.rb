@@ -15,7 +15,7 @@ module Search
 
       response = Faraday.get(uri, nil, USER_AGENT_HEADER => generate_user_agent)
 
-      @html_code = response.body if response.status == 200
+      response.body if response.status == 200
     rescue Faraday::ConnectionFailed
       raise IcRailsHueyToby::Errors::SearchServiceError
     end
