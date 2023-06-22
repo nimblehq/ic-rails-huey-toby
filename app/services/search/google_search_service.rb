@@ -6,7 +6,7 @@ module Search
 
     USER_AGENT_HEADER = 'User-Agent'
 
-    def initialize(keyword, language = 'en')
+    def initialize(keyword:, language: 'en')
       @search_url = format(GOOGLE_SEARCH_URL, keyword: keyword, language: language)
     end
 

@@ -4,7 +4,7 @@ module Search
   class BingSearchService
     BING_SEARCH_URL = 'https://www.bing.com/search?q=%{keyword}&setlang=%{language}'
 
-    def initialize(keyword, language = 'en')
+    def initialize(keyword:, language: 'en')
       @search_url = format(BING_SEARCH_URL, keyword: keyword, language: language)
     end
 
