@@ -5,7 +5,7 @@ module Parse
     SELECTORS = {
       adwords_top: 'div.b_imagePair.square_xb div.inner a',
       adwords_body: 'div.b_adurl a',
-      non_adwords: 'li.b_algo h2 a, div.pagereco_TTitle a',
+      non_adwords: 'li.b_algo h2 a, div.b_algoheader a, div.pagereco_TTitle a',
       href: 'href'
     }.freeze
 

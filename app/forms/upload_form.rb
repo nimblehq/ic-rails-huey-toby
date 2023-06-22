@@ -40,9 +40,8 @@ class UploadForm
   end
 
   def scrape_search_results(results)
-    results.map(&:id).each do |id|
-      SearchKeywordJob.perform_later(id)
-    end
+    search_result_ids = results.map(&:id)
+    DistributeSearchKeywordJob.perform_later(search_result_ids)
   end
 
   def csv_file_content_type
