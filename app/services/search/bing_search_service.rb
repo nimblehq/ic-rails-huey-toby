@@ -2,8 +2,6 @@
 
 module Search
   class BingSearchService
-    include UserAgentGenerator
-
     BING_SEARCH_URL = 'https://www.bing.com/search?q=%{keyword}&setlang=%{language}'
 
     def initialize(keyword:, language: 'en')
@@ -13,11 +11,12 @@ module Search
     def search
       uri = URI.parse(@search_url)
 
-      response = Faraday.get(uri, nil, USER_AGENT_HEADER => generate_user_agent)
+      headers = UserAgentHeaderGenerator.call
+      response = Faraday.get(uri, nil, headers)
 
       response.body if response.status == 200
     rescue Faraday::ConnectionFailed
-      raise IcRailsHueyToby::Errors::ClientServiceError
+      raise IcRailsHueyToby::Errors::SearchServiceError
     end
   end
 end

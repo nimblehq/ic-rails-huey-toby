@@ -5,7 +5,7 @@ module Parse
     SELECTORS = {
       adwords_top: 'div.b_imagePair.square_xb div.inner a',
       adwords_body: 'div.b_adurl a',
-      non_adwords: 'li.b_algo h2 a, div.pagereco_TTitle a',
+      non_adwords: 'li.b_algo h2 a, div.b_algoheader a, div.pagereco_TTitle a',
       href: 'href'
     }.freeze
 
@@ -22,7 +22,7 @@ module Parse
       non_adword_list = parse_non_adword_list(doc)
       total_links_count = parse_total_links_count(adword_list, non_adword_list)
 
-      Hash.new.merge(adword_list, non_adword_list, total_links_count) # rubocop:disable Style/EmptyLiteral
+      {}.merge(adword_list, non_adword_list, total_links_count)
     end
 
     private

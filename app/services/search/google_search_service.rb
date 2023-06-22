@@ -2,8 +2,6 @@
 
 module Search
   class GoogleSearchService
-    include UserAgentGenerator
-
     GOOGLE_SEARCH_URL = 'https://www.google.com/search?q=%{keyword}&hl=%{language}&lr=%{language}'
 
     def initialize(keyword:, language: 'en')
@@ -13,7 +11,8 @@ module Search
     def search
       uri = URI.parse(@search_url)
 
-      response = Faraday.get(uri, nil, USER_AGENT_HEADER => generate_user_agent)
+      headers = UserAgentHeaderGenerator.call
+      response = Faraday.get(uri, nil, headers)
 
       response.body if response.status == 200
     rescue Faraday::ConnectionFailed
