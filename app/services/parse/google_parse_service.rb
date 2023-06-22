@@ -22,7 +22,7 @@ module Parse
       non_adwords_result = parse_non_adword_list(doc)
       total_links_count = parse_total_links_count(adwords_result, non_adwords_result)
 
-      adwords_result.merge(non_adwords_result, total_links_count)
+      Hash.new.merge(adwords_result, non_adwords_result, total_links_count) # rubocop:disable Style/EmptyLiteral
     end
 
     private
