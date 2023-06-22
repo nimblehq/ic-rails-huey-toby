@@ -40,8 +40,9 @@ class UploadForm
   end
 
   def scrape_search_results(results)
-    results.map(&:id).each do |id|
-      SearchKeywordJob.perform_later(id)
+    results.each_with_index do |result, index|
+      delay_in_seconds = 3.seconds * index
+      SearchKeywordJob.set(wait: delay_in_seconds).perform_later(result.id)
     end
   end
 
