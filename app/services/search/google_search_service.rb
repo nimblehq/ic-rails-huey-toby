@@ -2,9 +2,9 @@
 
 module Search
   class GoogleSearchService
-    GOOGLE_SEARCH_URL = 'https://www.google.com/search?q=%{keyword}&hl=%{language}&lr=%{language}'
+    include UserAgentGenerator
 
-    USER_AGENT_HEADER = 'User-Agent'
+    GOOGLE_SEARCH_URL = 'https://www.google.com/search?q=%{keyword}&hl=%{language}&lr=%{language}'
 
     def initialize(keyword:, language: 'en')
       @search_url = format(GOOGLE_SEARCH_URL, keyword: keyword, language: language)
@@ -18,12 +18,6 @@ module Search
       response.body if response.status == 200
     rescue Faraday::ConnectionFailed
       raise IcRailsHueyToby::Errors::SearchServiceError
-    end
-
-    private
-
-    def generate_user_agent
-      Ronin::Web::UserAgents.chrome.random
     end
   end
 end
