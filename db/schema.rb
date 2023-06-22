@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_06_08_072404) do
+ActiveRecord::Schema.define(version: 2023_06_14_085953) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,6 +22,12 @@ ActiveRecord::Schema.define(version: 2023_06_08_072404) do
     t.datetime "updated_at", precision: 6, null: false
     t.text "html_code"
     t.string "status", default: "in_progress"
+    t.integer "adwords_top_count"
+    t.integer "adwords_total_count"
+    t.string "adwords_top_urls", array: true
+    t.integer "non_adwords_count"
+    t.string "non_adwords_urls", array: true
+    t.integer "total_links_count"
   end
 
 end
