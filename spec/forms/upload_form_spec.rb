@@ -90,6 +90,17 @@ RSpec.describe UploadForm, type: :model do
       end
     end
 
+    context 'given valid attributes with massive list of keywords' do
+      it 'runs search keyword jobs with random delay' do
+        upload_form = described_class.new(
+          search_engine: 'google',
+          csv_file: fixture_file_upload('upload_valid_massive_keywords.csv', 'text/csv')
+        )
+
+        expect { upload_form.save }.to have_enqueued_job(SearchKeywordJob).exactly(295).times
+      end
+    end
+
     context 'given any attribute is INVALID' do
       it 'raises an error' do
         upload_form = described_class.new(
