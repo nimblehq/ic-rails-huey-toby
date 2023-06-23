@@ -23,6 +23,10 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby] # Windows doe
 gem 'devise' # Authentication solution for Rails with Warden
 gem 'pundit' # Minimal authorization through OO design and pure Ruby classes
 
+# Scraping web content
+gem 'nokogiri' # HTML, XML, SAX, and Reader parser
+gem 'ronin-web-user_agents' # User agent generator
+
 # Translations
 # gem 'devise-i18n' # Translations for Devise
 # gem 'rails-i18n', '~> 6.0.0' # Translations for Rails

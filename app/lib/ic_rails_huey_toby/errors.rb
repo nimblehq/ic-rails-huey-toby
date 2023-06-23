@@ -13,5 +13,7 @@ module IcRailsHueyToby
     end
 
     class SearchServiceError < StandardError; end
+
+    class ParseServiceError < StandardError; end
   end
 end
