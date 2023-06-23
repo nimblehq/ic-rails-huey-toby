@@ -41,9 +41,12 @@ class UploadForm
 
   def scrape_search_results(results)
     results.map(&:id).each do |id|
-      delay_in_seconds = rand(1..600).seconds # Maximum delay is 10 minutes
-      SearchKeywordJob.set(wait: delay_in_seconds).perform_later(id)
+      SearchKeywordJob.set(wait: generate_delay_in_seconds).perform_later(id)
     end
+  end
+
+  def generate_delay_in_seconds
+    rand(1..600).seconds # Maximum delay is 10 minutes
   end
 
   def csv_file_content_type

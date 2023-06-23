@@ -97,7 +97,10 @@ RSpec.describe UploadForm, type: :model do
           csv_file: fixture_file_upload('upload_valid_massive_keywords.csv', 'text/csv')
         )
 
-        expect { upload_form.save }.to have_enqueued_job(SearchKeywordJob).exactly(295).times
+        allow_any_instance_of(described_class).to receive(:generate_delay_in_seconds).and_return(5) # rubocop: disable RSpec/AnyInstance
+        allow(Time).to receive(:now).and_return(Time.zone.parse('2023-01-01 00:00:00 +0700'))
+
+        expect { upload_form.save }.to have_enqueued_job(SearchKeywordJob).at(5.seconds.from_now).exactly(295).times
       end
     end
 
