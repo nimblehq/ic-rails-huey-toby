@@ -6,6 +6,8 @@ module Parse
       case search_engine.to_sym
       when :google
         Parse::GoogleParseService.new(html_code)
+      when :bing
+        Parse::BingParseService.new(html_code)
       else
         raise IcRailsHueyToby::Errors::ParseServiceError
       end

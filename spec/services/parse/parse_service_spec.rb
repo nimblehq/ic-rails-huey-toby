@@ -12,6 +12,14 @@ RSpec.describe Parse::ParseService, type: :service do
       end
     end
 
+    context 'given the search engine is bing' do
+      it 'returns instance of BingParseService' do
+        search_service = described_class.new(search_engine: 'bing', html_code: 'html_code')
+
+        expect(search_service).to be_a(Parse::BingParseService)
+      end
+    end
+
     context 'given the search engine is INVALID' do
       it 'raises an error' do
         expect { described_class.new(search_engine: 'yahoo', html_code: 'html_code') }.to raise_error(IcRailsHueyToby::Errors::ParseServiceError)

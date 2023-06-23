@@ -5,9 +5,9 @@ module Search
     def self.new(search_engine:, keyword:, language: 'en')
       case search_engine.to_sym
       when :google
-        Search::GoogleSearchService.new(keyword, language)
+        Search::GoogleSearchService.new(keyword: keyword, language: language)
       when :bing
-        Search::BingSearchService.new(keyword, language)
+        Search::BingSearchService.new(keyword: keyword, language: language)
       else
         raise IcRailsHueyToby::Errors::SearchServiceError
       end
