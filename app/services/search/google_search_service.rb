@@ -6,14 +6,16 @@ module Search
 
     USER_AGENT_HEADER = 'User-Agent'
 
+    X_FORWARDED_FOR_HEADER = 'X-Forwarded-For'
+
     def initialize(keyword, language = 'en')
       @search_url = format(GOOGLE_SEARCH_URL, keyword: keyword, language: language)
     end
 
     def search
-      uri = URI.parse(@search_url)
+      connection = create_connection(@search_url)
 
-      response = Faraday.get(uri, nil, USER_AGENT_HEADER => generate_user_agent)
+      response = connection.get
 
       response.body if response.status == 200
     rescue Faraday::ConnectionFailed
@@ -22,8 +24,24 @@ module Search
 
     private
 
+    def create_connection(search_url)
+      uri = URI.parse(search_url)
+      Faraday.new(url: uri, headers: create_request_header)
+    end
+
+    def create_request_header
+      {
+        USER_AGENT_HEADER => generate_user_agent,
+        X_FORWARDED_FOR_HEADER => generate_ip_address
+      }
+    end
+
     def generate_user_agent
       Ronin::Web::UserAgents.chrome.random
+    end
+
+    def generate_ip_address
+      FFaker::Internet.ip_v4_address
     end
   end
 end
