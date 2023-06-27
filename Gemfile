@@ -22,6 +22,9 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby] # Windows doe
 # Authentications & Authorizations
 gem 'devise' # Authentication solution for Rails with Warden
 gem 'pundit' # Minimal authorization through OO design and pure Ruby classes
+gem 'omniauth' # A generalized Rack framework for multiple-provider authentication
+gem 'omniauth-google-oauth2' # OmniAuth strategy for Google OAuth2
+gem 'omniauth-rails_csrf_protection', '~> 1.0' # OmniAuth strategy for Rails CSRF protection
 
 # Scraping web content
 gem 'nokogiri' # HTML, XML, SAX, and Reader parser
