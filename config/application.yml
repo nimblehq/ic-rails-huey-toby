@@ -10,6 +10,8 @@ default: &default
   AVAILABLE_LOCALES: "en"
   DEFAULT_LOCALE: "en"
   FALLBACK_LOCALES: "en"
+  GOOGLE_CLIENT_ID: dummy_client_id
+  GOOGLE_CLIENT_SECRET: dummy_client_secret
 
 development:
   <<: *default
@@ -23,5 +25,3 @@ test:
 docker_build:
   <<: *default
   SECRET_KEY_BASE: dummy_secret_key_base
-  GOOGLE_CLIENT_ID: dummy_client_id
-  GOOGLE_CLIENT_SECRET: dummy_client_secret
