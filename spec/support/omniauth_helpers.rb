@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-# spec/support/omniauth_helper.rb
 module Request
   class OmniAuthCallback
     attr_reader :provider

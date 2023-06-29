@@ -8,10 +8,11 @@ module Api
         def google_oauth2
           @user = User.from_omniauth(auth)
 
+          # TODO: Return JWT token on both success and error
           if @user.persisted?
             render_success
           else
-            render json: { errors: @user.errors.full_messages }, status: :unprocessable_entity
+            render_error
           end
         end
 
@@ -22,8 +23,11 @@ module Api
         end
 
         def render_success
-          # TODO: Return JWT token
           render json: { success: true }
+        end
+
+        def render_error
+          render json: { errors: @user.errors.full_messages }, status: :unprocessable_entity
         end
       end
     end
