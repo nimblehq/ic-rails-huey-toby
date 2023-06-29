@@ -4,6 +4,8 @@ en:
       models:
         search_result:
           create: "Upload success, please wait for the results."
+        user:
+          create: "User was successfully registered, please confirm your e-mail."
     errors:
       models:
         upload_form:

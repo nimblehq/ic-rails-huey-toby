@@ -17,24 +17,47 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable,
          :doorkeeper, :omniauthable, omniauth_providers: [:google_oauth2]
 
+  enum provider: { email: 'email', google_oauth2: 'google_oauth2' }
+
+  validates :provider, inclusion: { in: providers.keys }
+
   class << self
-    def from_omniauth(auth)
-      User.find_or_create_by(provider: auth.provider, uid: auth.uid, email: auth.info.email) do |user|
-        set_user_attributes(user, auth)
-      end
+    def from_email(email, password)
+      user = find_or_initialize_user(
+        email: email,
+        password: password,
+        provider: User.providers[:email]
+      )
+
+      user.persisted? ? user.errors.add(:email, :taken) : user.save
+
+      user
     end
 
-    private
+    def from_omniauth(auth)
+      user = find_or_initialize_user(
+        email: auth.info.email,
+        password: Devise.friendly_token[0, 20],
+        provider: auth.provider,
+        auth: auth
+      )
 
-    def set_user_attributes(user, auth)
-      user.provider = auth.provider
-      user.uid = auth.uid
+      user.provider == User.providers[:email] ? user.errors.add(:email, :taken) : user.persisted? || user.save
 
-      profile = auth.info
-      user.email = profile.email
-      user.password = Devise.friendly_token[0, 20]
-      user.full_name = profile.name
-      user.avatar_url = profile&.image
+      user
+    end
+
+    def find_or_initialize_user(email:, password:, provider:, auth: nil)
+      User.find_or_initialize_by(email: email) do |new_user|
+        new_user.assign_attributes(
+          email: email,
+          password: password,
+          provider: provider,
+          provider_uid: auth&.uid,
+          full_name: auth&.info&.name,
+          avatar_url: auth&.info&.image
+        )
+      end
     end
   end
 end
