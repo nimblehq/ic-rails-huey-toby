@@ -8,7 +8,7 @@ module Api
         def google_oauth2
           @user = User.from_omniauth(auth)
 
-          # TODO: Return JWT token on both success and error
+          # TODO: Return tokens on both success and error
           if @user.persisted?
             render_success
           else
