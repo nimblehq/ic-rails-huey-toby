@@ -5,24 +5,24 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable,
          :omniauthable, omniauth_providers: [:google_oauth2]
 
-  def self.from_omniauth(auth)
-    find_existing_user(auth) || create_new_user(auth)
-  end
-
-  private_class_method def self.find_existing_user(auth)
-    where(provider: auth.provider, uid: auth.uid, email: auth.info.email).first
-  end
-
-  private_class_method def self.create_new_user(auth)
-    create do |user|
-      set_user_attributes(user, auth)
+  class << self
+    def from_omniauth(auth)
+      User.find_or_create_by(provider: auth.provider, uid: auth.uid, email: auth.info.email) do |user|
+        set_user_attributes(user, auth)
+      end
     end
-  end
 
-  private_class_method def self.set_user_attributes(user, auth)
-    user.email = auth.info.email
-    user.password = Devise.friendly_token[0, 20]
-    user.full_name = auth.info.name
-    user.avatar_url = auth.info.image
+    private
+
+    def set_user_attributes(user, auth)
+      user.provider = auth.provider
+      user.uid = auth.uid
+
+      profile = auth.info
+      user.email = profile.email
+      user.password = Devise.friendly_token[0, 20]
+      user.full_name = profile.name
+      user.avatar_url = profile.image
+    end
   end
 end

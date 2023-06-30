@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 Fabricator(:user) do
-  id { 1 }
-  provider { 'google_oauth2' }
-  uid { '100000000000000000000' }
-  email { 'john@example.com' }
-  password { 'password' }
-  full_name { 'John Smith' }
-  avatar_url { 'https://lh4.googleusercontent.com/photo.jpg' }
+  id { Faker::Number.digit }
+  provider { Faker::Omniauth.google['provider'] }
+  uid { Faker::Omniauth.google['uid'] }
+  email { Faker::Internet.email }
+  password { Faker::Internet.password }
+  full_name { Faker::Name.name }
+  avatar_url { Faker::Avatar.image }
 end
