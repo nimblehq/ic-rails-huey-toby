@@ -9,7 +9,7 @@ Rails.application.routes.draw do
 
       devise_for :users, controllers: {
         omniauth_callbacks: 'api/v1/users/omniauth_callbacks'
-       }
+      }
 
       root "/health#show"
     end

@@ -7,7 +7,7 @@ RSpec.describe 'Omniauth Callbacks', type: :request do
     context 'given the email is available' do
       it 'renders a successful response' do
         user = Fabricate(:user)
-        Request::OmniAuthCallback.new(:google_oauth2).mock uid: user.uid
+        Request::OmniAuthCallback.new(:google_oauth2).mock(uid: user.uid)
         allow(User).to receive(:from_omniauth).and_return(user)
         allow(user).to receive(:persisted?).and_return(true)
 
@@ -21,7 +21,7 @@ RSpec.describe 'Omniauth Callbacks', type: :request do
     context 'given the email is NOT available' do
       it 'renders an unprocessable entity response with errors' do
         user = Fabricate(:user)
-        Request::OmniAuthCallback.new(:google_oauth2).mock uid: user.uid
+        Request::OmniAuthCallback.new(:google_oauth2).mock(uid: user.uid)
         allow(User).to receive(:from_omniauth).and_return(user)
         allow(user).to receive(:persisted?).and_return(false)
         allow(user.errors).to receive(:full_messages).and_return(['Email has already been taken'])

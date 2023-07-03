@@ -5,6 +5,7 @@ module Api
     module Users
       class OmniauthCallbacksController < Devise::OmniauthCallbacksController
         respond_to :json
+
         def google_oauth2
           @user = User.from_omniauth(auth)
 

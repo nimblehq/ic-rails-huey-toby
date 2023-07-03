@@ -22,7 +22,7 @@ class User < ApplicationRecord
       user.email = profile.email
       user.password = Devise.friendly_token[0, 20]
       user.full_name = profile.name
-      user.avatar_url = profile.image
+      user.avatar_url = profile&.image
     end
   end
 end
