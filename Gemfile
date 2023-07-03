@@ -21,6 +21,8 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby] # Windows doe
 
 # Authentications & Authorizations
 gem 'devise' # Authentication solution for Rails with Warden
+gem 'doorkeeper' # Doorkeeper is an OAuth 2 provider for Rails and Grape
+gem 'devise-doorkeeper' # Doorkeeper strategy for Devise
 gem 'pundit' # Minimal authorization through OO design and pure Ruby classes
 gem 'omniauth' # A generalized Rack framework for multiple-provider authentication
 gem 'omniauth-google-oauth2' # OmniAuth strategy for Google OAuth2

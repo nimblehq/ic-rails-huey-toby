@@ -1,9 +1,21 @@
 # frozen_string_literal: true
 
 class User < ApplicationRecord
+  has_many :access_grants,
+           class_name: 'Doorkeeper::AccessGrant',
+           foreign_key: :resource_owner_id,
+           dependent: :delete_all,
+           inverse_of: :user
+
+  has_many :access_tokens,
+           class_name: 'Doorkeeper::AccessToken',
+           foreign_key: :resource_owner_id,
+           dependent: :delete_all,
+           inverse_of: :user
+
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable,
-         :omniauthable, omniauth_providers: [:google_oauth2]
+         :doorkeeper, :omniauthable, omniauth_providers: [:google_oauth2]
 
   class << self
     def from_omniauth(auth)
