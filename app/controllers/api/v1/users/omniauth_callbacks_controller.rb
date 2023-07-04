@@ -9,12 +9,7 @@ module Api
         def google_oauth2
           @user = User.from_omniauth(auth)
 
-          # TODO: Return tokens on both success and error
-          if @user.persisted?
-            render_success
-          else
-            render_error
-          end
+          render_new_token
         end
 
         private
@@ -23,12 +18,11 @@ module Api
           @auth ||= request.env['omniauth.auth']
         end
 
-        def render_success
-          render json: { success: true }, status: :ok
-        end
+        def render_new_token
+          oauth_token = OauthToken.generate_access_token(@user)
+          data = OauthTokenSerializer.new(oauth_token).serializable_hash[:data]
 
-        def render_error
-          render json: { errors: @user.errors.full_messages }, status: :unprocessable_entity
+          render json: { data: data }, status: :ok
         end
       end
     end
