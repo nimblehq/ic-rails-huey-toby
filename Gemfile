@@ -22,6 +22,8 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby] # Windows doe
 # Authentications & Authorizations
 gem 'devise' # Authentication solution for Rails with Warden
 gem 'pundit' # Minimal authorization through OO design and pure Ruby classes
+gem 'omniauth' # A generalized Rack framework for multiple-provider authentication
+gem 'omniauth-google-oauth2' # OmniAuth strategy for Google OAuth2
 
 # Scraping web content
 gem 'nokogiri' # HTML, XML, SAX, and Reader parser
@@ -53,6 +55,7 @@ group :development, :test do
   gem 'figaro' # Simple Rails app configuration
   gem 'listen' # Listens to file modifications
   gem 'letter_opener' # Preview mail in the browser instead of sending
+  gem 'faker'
   gem 'ffaker' # A library for generating fake data such as names, addresses, and phone numbers
   gem 'fabrication' # Fabrication generates objects in Ruby. Fabricators are schematics for your objects, and can be created as needed anywhere in your app or specs
 

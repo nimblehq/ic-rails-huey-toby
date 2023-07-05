@@ -7,6 +7,10 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :upload, only: [:create], controller: 'search_results'
 
+      devise_for :users, controllers: {
+        omniauth_callbacks: 'api/v1/users/omniauth_callbacks'
+      }
+
       root "/health#show"
     end
   end
