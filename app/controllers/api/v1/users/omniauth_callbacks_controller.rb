@@ -7,9 +7,9 @@ module Api
         respond_to :json
 
         def google_oauth2
-          @user = User.from_omniauth(auth)
+          user = User.from_omniauth(auth)
 
-          render_new_token
+          render_response(user)
         end
 
         private
@@ -18,11 +18,17 @@ module Api
           @auth ||= request.env['omniauth.auth']
         end
 
-        def render_new_token
-          oauth_token = OauthToken.generate_access_token(@user)
+        def render_response(user)
+          oauth_token = OauthToken.generate_access_token(user)
           data = OauthTokenSerializer.new(oauth_token).serializable_hash[:data]
 
-          render json: { data: data }, status: :ok
+          message = if user.persisted?
+                      I18n.t('activemodel.notices.models.user.sign_in')
+                    else
+                      I18n.t('activemodel.notices.models.user.sign_up')
+                    end
+
+          render json: { data: data, meta: { message: message } }, status: :ok
         end
       end
     end
