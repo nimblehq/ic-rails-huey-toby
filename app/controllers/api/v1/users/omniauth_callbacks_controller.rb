@@ -20,7 +20,7 @@ module Api
 
         def render_response(user)
           oauth_token = OauthToken.generate_access_token(user)
-          data = OauthTokenSerializer.new(oauth_token).serializable_hash[:data]
+          token_data = OauthTokenSerializer.new(oauth_token).serializable_hash[:data]
 
           message = if user.persisted?
                       I18n.t('activemodel.notices.models.user.sign_in')
@@ -28,7 +28,7 @@ module Api
                       I18n.t('activemodel.notices.models.user.sign_up')
                     end
 
-          render json: { data: data, meta: { message: message } }, status: :ok
+          render json: { data: token_data, meta: { message: message } }, status: :ok
         end
       end
     end
