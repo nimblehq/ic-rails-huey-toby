@@ -6,10 +6,7 @@ module Api
       before_action :doorkeeper_authorize!
 
       def create
-        upload_form = UploadForm.new(
-          search_engine: upload_form_params[:search_engine],
-          csv_file: upload_form_params[:csv_file]
-        )
+        upload_form = create_upload_form
 
         if upload_form.valid?
           search_results = upload_form.save
@@ -20,6 +17,16 @@ module Api
       end
 
       private
+
+      def create_upload_form
+        current_user = User.find(doorkeeper_token.resource_owner_id) if doorkeeper_token
+
+        UploadForm.new(
+          search_engine: upload_form_params[:search_engine],
+          csv_file: upload_form_params[:csv_file]
+          user_id: current_user.id
+        )
+      end
 
       def upload_form_params
         params.permit(:search_engine, :csv_file)

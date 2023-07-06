@@ -9,7 +9,7 @@ CSV_COUNT_MAX = 1000
 class UploadForm
   include ActiveModel::Validations
 
-  attr_reader :search_engine, :csv_file
+  attr_reader :search_engine, :csv_file, :user_id
 
   validates :search_engine, presence: true
   validates :search_engine, inclusion: { in: SearchResult.search_engines.keys }
@@ -18,9 +18,10 @@ class UploadForm
   validate :csv_file_content_type, if: -> { csv_file.present? }
   validate :keyword_count, if: -> { csv_file.present? && csv? }
 
-  def initialize(search_engine:, csv_file:)
+  def initialize(search_engine:, csv_file:, user_id:)
     @search_engine = search_engine
     @csv_file = csv_file
+    @user_id = user_id
   end
 
   def save
@@ -28,7 +29,7 @@ class UploadForm
     keywords = CSV.parse(content).flatten.map(&:strip)
 
     keywords
-      .map { |keyword| SearchResult.new(keyword: keyword, search_engine: search_engine) }
+      .map { |keyword| SearchResult.new(keyword: keyword, search_engine: search_engine, user_id: user_id) }
       .tap { |results| save_search_results(results) }
       .tap { |results| scrape_search_results(results) }
   end
