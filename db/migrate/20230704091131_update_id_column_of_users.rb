@@ -1,4 +1,4 @@
-class UpdateIdUsers < ActiveRecord::Migration[7.0]
+class UpdateIdColumnOfUsers < ActiveRecord::Migration[7.0]
   def up
     # Add UUID columns
     add_column :users,    :uuid, :uuid, null: false, default: -> { "gen_random_uuid()" }
