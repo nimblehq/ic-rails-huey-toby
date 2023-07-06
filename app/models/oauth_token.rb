@@ -5,6 +5,7 @@ class OauthToken < ApplicationRecord
   OAUTH_APPLICATION_REDIRECT_URI = 'urn:ietf:wg:oauth:2.0:oob'
 
   class << self
+    # Generate token manually to automatically log a user in after registering
     # https://github.com/doorkeeper-gem/doorkeeper/issues/846#issuecomment-230297646
     def generate_access_token(user)
       Doorkeeper::AccessToken.create(
