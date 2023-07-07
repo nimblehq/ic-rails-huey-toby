@@ -4,9 +4,6 @@ en:
       models:
         search_result:
           create: "Upload success, please wait for the results."
-        user:
-          sign_in: "Signed in successfully."
-          sign_up: "Signed up successfully."
     errors:
       models:
         upload_form:

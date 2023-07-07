@@ -18,7 +18,6 @@ RSpec.describe 'Omniauth Callbacks', type: :request do
 
         expect(response).to have_http_status(:success)
         expect(JSON.parse(response.body)['data']['type']).to eq('oauth_token')
-        expect(JSON.parse(response.body)['meta']['message']).to eq(I18n.t('activemodel.notices.models.user.sign_in'))
       end
     end
 
@@ -36,7 +35,6 @@ RSpec.describe 'Omniauth Callbacks', type: :request do
 
         expect(response).to have_http_status(:success)
         expect(JSON.parse(response.body)['data']['type']).to eq('oauth_token')
-        expect(JSON.parse(response.body)['meta']['message']).to eq(I18n.t('activemodel.notices.models.user.sign_up'))
       end
     end
   end
