@@ -5,6 +5,7 @@ module Api
     module Users
       class OmniauthCallbacksController < Devise::OmniauthCallbacksController
         rescue_from Exception, with: :render_error
+
         respond_to :json
 
         def google_oauth2
