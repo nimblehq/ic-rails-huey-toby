@@ -4,6 +4,8 @@ module Api
   module V1
     module Users
       class OmniauthCallbacksController < Devise::OmniauthCallbacksController
+        skip_before_action :doorkeeper_authorize!
+
         rescue_from Exception, with: :render_error
 
         respond_to :json
