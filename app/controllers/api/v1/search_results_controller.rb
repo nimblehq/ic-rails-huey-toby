@@ -3,8 +3,6 @@
 module Api
   module V1
     class SearchResultsController < ApplicationController
-      include Pagy::Backend
-
       before_action :doorkeeper_authorize!
 
       def create
@@ -18,14 +16,14 @@ module Api
         end
       end
 
-      # TODO: Consider create form object
       def index
-        @pagy, @search_results = pagy(SearchResult.order(:id).where(user_id: current_user.id), pagination_params)
+        search_results_form = SearchResultsForm.new(user_id: current_user.id)
+        paginated_results = search_results_form.paginated_results(params: params)
 
-        data = SearchResultsSerializer.new(@search_results).serializable_hash[:data]
-        meta = meta_from_pagy(@pagy)
+        search_result_data = SearchResultsSerializer.new(paginated_results[:results]).serializable_hash[:data]
+        pagy_meta = meta_from_pagy(paginated_results[:pagy])
 
-        render json: { data: data, meta: meta }, status: :ok
+        render json: { data: search_result_data, meta: pagy_meta }, status: :ok
       rescue Pagy::OverflowError
         render status: :not_found
       end
@@ -58,13 +56,6 @@ module Api
       def render_failed(upload_form)
         # TODO: return error messages in JSON:API format
         render json: { errors: upload_form.errors.full_messages }, status: :unprocessable_entity
-      end
-
-      def pagination_params
-        {
-          page: params.dig(:page, :number) || Pagy::DEFAULT[:page],
-          items: params.dig(:page, :size) || Pagy::DEFAULT[:items]
-        }
       end
 
       def meta_from_pagy(pagy)
