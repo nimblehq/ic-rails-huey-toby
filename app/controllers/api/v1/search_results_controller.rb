@@ -3,6 +3,8 @@
 module Api
   module V1
     class SearchResultsController < ApplicationController
+      before_action :doorkeeper_authorize!
+
       def create
         upload_form = UploadForm.new(
           search_engine: upload_form_params[:search_engine],
