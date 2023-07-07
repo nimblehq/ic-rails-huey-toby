@@ -148,10 +148,16 @@ GEM
       railties (>= 4.1.0)
       responders
       warden (~> 1.2.3)
+    devise-doorkeeper (1.2.0)
+      devise
+      doorkeeper
+      rails
     diff-lcs (1.5.0)
     discard (1.2.1)
       activerecord (>= 4.2, < 8)
     docile (1.4.0)
+    doorkeeper (5.6.6)
+      railties (>= 5)
     erubi (1.12.0)
     fabrication (2.30.0)
     faker (3.2.0)
@@ -454,7 +460,9 @@ DEPENDENCIES
   danger-undercover
   database_cleaner
   devise
+  devise-doorkeeper
   discard
+  doorkeeper
   fabrication
   faker
   ffaker

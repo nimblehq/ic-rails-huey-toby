@@ -1,6 +1,8 @@
 require 'sidekiq/web'
 
 Rails.application.routes.draw do
+  use_doorkeeper
+
   mount Sidekiq::Web => "/sidekiq" if Rails.env.development?
 
   namespace :api do
