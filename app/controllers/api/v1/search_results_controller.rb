@@ -3,8 +3,6 @@
 module Api
   module V1
     class SearchResultsController < ApplicationController
-      before_action :doorkeeper_authorize!
-
       def create
         upload_form = create_upload_form
 
@@ -29,10 +27,6 @@ module Api
       end
 
       private
-
-      def current_user
-        @current_user = User.find(doorkeeper_token.resource_owner_id) if doorkeeper_token
-      end
 
       def create_upload_form
         UploadForm.new(
