@@ -4,6 +4,8 @@ module Api
   module V1
     module Users
       class RegistrationsController < Devise::RegistrationsController
+        include ValidClientConcern
+
         respond_to :json
 
         before_action :ensure_valid_client
@@ -35,14 +37,6 @@ module Api
           # TODO: return error messages in JSON:API format
 
           render json: { errors: user.errors.full_messages }, status: :unprocessable_entity
-        end
-
-        def ensure_valid_client
-          # TODO: return error messages in JSON:API format
-
-          client_app = Doorkeeper::Application.by_uid_and_secret(params[:client_id], params[:client_secret])
-
-          render json: { errors: I18n.t('doorkeeper.errors.messages.invalid_client') }, status: :forbidden if client_app.blank?
         end
       end
     end

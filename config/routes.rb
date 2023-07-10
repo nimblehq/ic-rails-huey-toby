@@ -11,6 +11,7 @@ Rails.application.routes.draw do
       resources :search_results, only: [:index]
 
       devise_for :users, controllers: {
+        sessions: 'api/v1/users/sessions',
         registrations: 'api/v1/users/registrations',
         omniauth_callbacks: 'api/v1/users/omniauth_callbacks'
       }
