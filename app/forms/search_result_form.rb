@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class SearchResultsForm
+class SearchResultForm
   include Pagy::Backend
 
   def initialize(user_id:)
@@ -22,7 +22,6 @@ class SearchResultsForm
     {
       page: params.dig(:page, :number) || Pagy::DEFAULT[:page],
       items: params.dig(:page, :size) || Pagy::DEFAULT[:items]
-
     }
   end
 end
