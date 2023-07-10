@@ -13,7 +13,8 @@ Rails.application.routes.draw do
       devise_for :users, controllers: {
         sessions: 'api/v1/users/sessions',
         registrations: 'api/v1/users/registrations',
-        omniauth_callbacks: 'api/v1/users/omniauth_callbacks'
+        omniauth_callbacks: 'api/v1/users/omniauth_callbacks',
+        confirmations: 'api/v1/users/confirmations'
       }
 
       root "/health#show"
