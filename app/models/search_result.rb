@@ -7,4 +7,6 @@ class SearchResult < ApplicationRecord
   validates :keyword, :search_engine, :status, presence: true
   validates :search_engine, inclusion: { in: search_engines.keys }
   validates :status, inclusion: { in: statuses.keys }
+
+  belongs_to :user
 end

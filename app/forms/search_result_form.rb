@@ -1,11 +1,16 @@
 # frozen_string_literal: true
 
 class SearchResultForm
+  include ActiveModel::Validations
   include Pagy::Backend
+
+  attr_reader :user_id
+
+  validates :user_id, presence: true
 
   def initialize(user_id:)
     @user_id = user_id
-    @search_results = SearchResult.order(:id).where(user_id: @user_id)
+    @search_results = SearchResult.where(user_id: @user_id).order(:id)
   end
 
   def paginated_results(params:)

@@ -14,6 +14,7 @@ class UploadForm
   validates :search_engine, presence: true
   validates :search_engine, inclusion: { in: SearchResult.search_engines.keys }
   validates :csv_file, presence: true
+  validates :user_id, presence: true
 
   validate :csv_file_content_type, if: -> { csv_file.present? }
   validate :keyword_count, if: -> { csv_file.present? && csv? }
