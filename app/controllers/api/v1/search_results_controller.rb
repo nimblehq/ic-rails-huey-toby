@@ -3,6 +3,8 @@
 module Api
   module V1
     class SearchResultsController < ApplicationController
+      include Pagination
+
       def create
         upload_form = create_upload_form
 
@@ -15,11 +17,11 @@ module Api
       end
 
       def index
-        search_results_form = SearchResultForm.new(user_id: current_user.id)
-        paginated_results = search_results_form.paginated_results(params: params)
+        search_result_list = SearchResult.where(user_id: current_user.id).order(:id)
+        pagy, paginated_results = paginated_resources_for(search_result_list)
 
-        search_result_data = SearchResultsSerializer.new(paginated_results[:results]).serializable_hash[:data]
-        pagy_meta = meta_from_pagy(paginated_results[:pagy])
+        search_result_data = SearchResultsSerializer.new(paginated_results).serializable_hash[:data]
+        pagy_meta = meta_from_pagy(pagy)
 
         render json: { data: search_result_data, meta: pagy_meta }, status: :ok
       rescue Pagy::OverflowError
