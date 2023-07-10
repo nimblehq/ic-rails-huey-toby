@@ -7,7 +7,8 @@ RSpec.describe 'Search Results', type: :request do
     context 'given an authenticated user' do
       context 'given a valid search engine and csv file' do
         it 'returns a successful response with JSON' do
-          post_authenticated_request(endpoint: '/api/v1/upload',
+          user = Fabricate(:user)
+          post_authenticated_request(user: user, endpoint: '/api/v1/upload',
                                      params: {
                                        search_engine: 'google',
                                        csv_file: fixture_file_upload('upload_valid.csv', 'text/csv')
@@ -21,7 +22,8 @@ RSpec.describe 'Search Results', type: :request do
 
       context 'given NO search engine' do
         it 'returns an unsuccessful response with JSON' do
-          post_authenticated_request(endpoint: '/api/v1/upload',
+          user = Fabricate(:user)
+          post_authenticated_request(user: user, endpoint: '/api/v1/upload',
                                      params: {
                                        search_engine: nil,
                                        csv_file: fixture_file_upload('upload_valid.csv', 'text/csv')
@@ -34,7 +36,8 @@ RSpec.describe 'Search Results', type: :request do
 
       context 'given INVALID search engine' do
         it 'returns an unsuccessful response with JSON' do
-          post_authenticated_request(endpoint: '/api/v1/upload',
+          user = Fabricate(:user)
+          post_authenticated_request(user: user, endpoint: '/api/v1/upload',
                                      params: {
                                        search_engine: 'yahoo',
                                        csv_file: fixture_file_upload('upload_valid.csv', 'text/csv')
@@ -47,7 +50,8 @@ RSpec.describe 'Search Results', type: :request do
 
       context 'given NO csv file' do
         it 'returns an unsuccessful response with JSON' do
-          post_authenticated_request(endpoint: '/api/v1/upload',
+          user = Fabricate(:user)
+          post_authenticated_request(user: user, endpoint: '/api/v1/upload',
                                      params: {
                                        search_engine: 'google',
                                        csv_file: nil
@@ -60,7 +64,8 @@ RSpec.describe 'Search Results', type: :request do
 
       context 'given INVALID file extension' do
         it 'returns an unsuccessful response with JSON' do
-          post_authenticated_request(endpoint: '/api/v1/upload',
+          user = Fabricate(:user)
+          post_authenticated_request(user: user, endpoint: '/api/v1/upload',
                                      params: {
                                        search_engine: 'google',
                                        csv_file: fixture_file_upload('upload_invalid_extension.txt', 'text/plain')
@@ -73,7 +78,8 @@ RSpec.describe 'Search Results', type: :request do
 
       context 'given INVALID file count' do
         it 'returns an unsuccessful response with JSON' do
-          post_authenticated_request(endpoint: '/api/v1/upload',
+          user = Fabricate(:user)
+          post_authenticated_request(user: user, endpoint: '/api/v1/upload',
                                      params: {
                                        search_engine: 'google',
                                        csv_file: fixture_file_upload('upload_invalid_count.csv', 'text/csv')
@@ -92,6 +98,48 @@ RSpec.describe 'Search Results', type: :request do
                search_engine: 'google',
                csv_file: fixture_file_upload('upload_valid.csv', 'text/csv')
              }
+
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+  end
+
+  describe 'GET #search_results' do
+    context 'given an authenticated user' do
+      context 'given a empty params' do
+        it 'returns a successful response with JSON' do
+          user = Fabricate(:user)
+          Fabricate.times(20, :search_result, user_id: user.id)
+          get_authenticated_request(user: user, endpoint: '/api/v1/search_results')
+
+          expect(JSON.parse(response.body)['data'][0]['type']).to eq('search_results')
+          expect(JSON.parse(response.body)['meta']['page']).to eq(1)
+          expect(JSON.parse(response.body)['meta']['pages']).to eq(2)
+          expect(JSON.parse(response.body)['meta']['page_size']).to eq(10)
+          expect(JSON.parse(response.body)['meta']['records']).to eq(20)
+          expect(response).to have_http_status(:ok)
+        end
+      end
+
+      context 'given a valid params' do
+        it 'returns a successful response with JSON' do
+          user = Fabricate(:user)
+          Fabricate.times(20, :search_result, user_id: user.id)
+          get_authenticated_request(user: user, endpoint: '/api/v1/search_results', params: { page: { number: 1, size: 20 } })
+
+          expect(JSON.parse(response.body)['data'][0]['type']).to eq('search_results')
+          expect(JSON.parse(response.body)['meta']['page']).to eq(1)
+          expect(JSON.parse(response.body)['meta']['pages']).to eq(1)
+          expect(JSON.parse(response.body)['meta']['page_size']).to eq(20)
+          expect(JSON.parse(response.body)['meta']['records']).to eq(20)
+          expect(response).to have_http_status(:ok)
+        end
+      end
+    end
+
+    context 'given an UNAUTHENTICATED user' do
+      it 'returns an unauthorized response with JSON' do
+        get '/api/v1/search_results'
 
         expect(response).to have_http_status(:unauthorized)
       end
