@@ -15,7 +15,7 @@ module Api
       end
 
       def index
-        search_results_form = SearchResultsForm.new(user_id: current_user.id)
+        search_results_form = SearchResultForm.new(user_id: current_user.id)
         paginated_results = search_results_form.paginated_results(params: params)
 
         search_result_data = SearchResultsSerializer.new(paginated_results[:results]).serializable_hash[:data]
