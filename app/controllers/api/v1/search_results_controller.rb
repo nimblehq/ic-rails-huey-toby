@@ -6,8 +6,6 @@ module Api
       include Pagination
 
       def create
-        upload_form = create_upload_form
-
         if upload_form.valid?
           search_results = upload_form.save
           render_success(search_results)
@@ -30,8 +28,8 @@ module Api
 
       private
 
-      def create_upload_form
-        UploadForm.new(
+      def upload_form
+        @upload_form ||= UploadForm.new(
           search_engine: upload_form_params[:search_engine],
           csv_file: upload_form_params[:csv_file],
           user_id: current_user.id
