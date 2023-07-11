@@ -33,6 +33,7 @@ module Api
       end
 
       def render_failed(upload_form)
+        # TODO: return error messages in JSON:API format
         render json: { errors: upload_form.errors.full_messages }, status: :unprocessable_entity
       end
     end

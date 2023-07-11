@@ -29,6 +29,7 @@ module Api
         end
 
         def render_error(user)
+          # TODO: return error messages in JSON:API format
           render json: { errors: user.errors.full_messages }, status: :internal_server_error
         end
       end
