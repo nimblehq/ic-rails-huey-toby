@@ -8,20 +8,23 @@ module Api
       def create
         if upload_form.valid?
           search_results = upload_form.save
-          render_success(search_results)
+
+          message = I18n.t('activemodel.notices.models.search_result.create')
+          search_results_serializer = SearchResultsSerializer.new(search_results, meta: { message: message })
+
+          render_success(serializer: search_results_serializer, status: :created)
         else
-          render_failed(upload_form)
+          render_error(detail: upload_form.errors.full_messages, status: :unprocessable_entity)
         end
       end
 
       def index
-        # TODO: Add pundit to filter search results by user
-        search_result_list = SearchResult.where(user_id: current_user.id).order(:id)
+        search_result_list = current_user.search_results.order(:id)
         pagy, paginated_results = paginated_resources_for(search_result_list)
 
         search_result_serializer = SearchResultsSerializer.new(paginated_results, meta: meta_from_pagy(pagy))
 
-        render json: search_result_serializer, status: :ok
+        render_success(serializer: search_result_serializer, status: :ok)
       end
 
       private
@@ -38,15 +41,8 @@ module Api
         params.permit(:search_engine, :csv_file)
       end
 
-      def render_success(search_results)
-        data = SearchResultsSerializer.new(search_results).serializable_hash[:data]
-        message = I18n.t('activemodel.notices.models.search_result.create')
-
-        render json: { data: data, meta: { message: message } }, status: :created
-      end
-
-      def render_failed(upload_form)
-        render json: { errors: upload_form.errors.full_messages }, status: :unprocessable_entity
+      def render_success(serializer:, status:)
+        render json: serializer, status: status
       end
     end
   end
