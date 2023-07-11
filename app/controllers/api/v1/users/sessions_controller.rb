@@ -11,9 +11,9 @@ module Api
         before_action :ensure_valid_client
 
         def create
-          user = User.find_by(email: params[:user][:email])
+          user = User.find_by(email: user_params[:email])
           valid_provider = user&.provider == User.providers[:email]
-          valid_password = user&.valid_password?(params[:user][:password])
+          valid_password = user&.valid_password?(user_params[:password])
 
           # TODO: Check if user has verified e-mail (#7)
           if valid_provider && valid_password
@@ -24,6 +24,10 @@ module Api
         end
 
         private
+
+        def user_params
+          params.require(:user).permit(:email, :password)
+        end
 
         def render_success(user)
           oauth_token = OauthToken.generate_access_token(user)
