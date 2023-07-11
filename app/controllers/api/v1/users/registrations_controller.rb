@@ -10,7 +10,11 @@ module Api
 
         def create
           user = User.from_email(user_params[:email], user_params[:password])
-          user.errors.empty? ? render_success(user) : render_error(user)
+          if user.errors.empty?
+            render_success(user)
+          else
+            render_error(user)
+          end
         end
 
         private
@@ -20,10 +24,10 @@ module Api
         end
 
         def render_success(user)
-          data = UserSerializer.new(user).serializable_hash[:data]
-          message = I18n.t('activemodel.notices.models.user.create')
+          success_message = I18n.t('activemodel.notices.models.user.create')
+          user_data = UserSerializer.new(user, meta: { message: success_message })
 
-          render json: { data: data, meta: { message: message } }, status: :created
+          render json: user_data, status: :created
         end
 
         def render_error(user)

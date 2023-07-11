@@ -8,7 +8,11 @@ module Api
 
         def google_oauth2
           user = User.from_omniauth(auth)
-          user.errors.empty? ? render_success(user) : render_error(user)
+          if user.errors.empty?
+            render_success(user)
+          else
+            render_error(user)
+          end
         end
 
         private
@@ -19,9 +23,9 @@ module Api
 
         def render_success(user)
           oauth_token = OauthToken.generate_access_token(user)
-          token_data = OauthTokenSerializer.new(oauth_token).serializable_hash[:data]
+          token_data = OauthTokenSerializer.new(oauth_token)
 
-          render json: { data: token_data }, status: :ok
+          render json: token_data, status: :ok
         end
 
         def render_error(user)

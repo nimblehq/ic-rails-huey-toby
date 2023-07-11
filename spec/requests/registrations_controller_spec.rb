@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe 'Registrations', type: :request do
   describe 'POST #create' do
-    context 'given the email is NOT already taken' do
+    context 'given the email is available' do
       it 'renders a sign-up successful response' do
         application = Fabricate(:application)
         allow(Doorkeeper::Application).to receive(:first).and_return(application)
@@ -23,7 +23,7 @@ RSpec.describe 'Registrations', type: :request do
       end
     end
 
-    context 'given the email is already taken' do
+    context 'given the email is NOT available' do
       it 'returns an 422 error' do
         application = Fabricate(:application)
         allow(Doorkeeper::Application).to receive(:first).and_return(application)
@@ -43,7 +43,7 @@ RSpec.describe 'Registrations', type: :request do
       end
     end
 
-    context 'given the wrong client' do
+    context 'given the client is NOT correct' do
       it 'returns an 403 error' do
         application = Fabricate(:application)
         allow(Doorkeeper::Application).to receive(:first).and_return(application)
