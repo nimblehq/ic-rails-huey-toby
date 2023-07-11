@@ -72,6 +72,7 @@ ActiveRecord::Schema.define(version: 2023_07_10_023912) do
     t.string "non_adwords_urls", array: true
     t.integer "total_links_count"
     t.uuid "user_id"
+    t.index ["user_id"], name: "index_search_results_on_user_id"
   end
 
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
