@@ -15,15 +15,13 @@ module Api
       end
 
       def index
+        # TODO: Add pundit to filter search results by user
         search_result_list = SearchResult.where(user_id: current_user.id).order(:id)
         pagy, paginated_results = paginated_resources_for(search_result_list)
 
-        search_result_data = SearchResultsSerializer.new(paginated_results).serializable_hash[:data]
-        pagy_meta = meta_from_pagy(pagy)
+        search_result_serializer = SearchResultsSerializer.new(paginated_results, meta: meta_from_pagy(pagy))
 
-        render json: { data: search_result_data, meta: pagy_meta }, status: :ok
-      rescue Pagy::OverflowError
-        render status: :not_found
+        render json: search_result_serializer, status: :ok
       end
 
       private
@@ -50,15 +48,6 @@ module Api
       def render_failed(upload_form)
         # TODO: return error messages in JSON:API format
         render json: { errors: upload_form.errors.full_messages }, status: :unprocessable_entity
-      end
-
-      def meta_from_pagy(pagy)
-        {
-          page: pagy.page,
-          pages: pagy.pages,
-          page_size: pagy.items,
-          records: pagy.count
-        }
       end
     end
   end

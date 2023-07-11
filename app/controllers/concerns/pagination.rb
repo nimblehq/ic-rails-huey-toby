@@ -16,5 +16,14 @@ module Pagination
         items: params.dig(:page, :size)
       }
     end
+
+    def meta_from_pagy(pagy)
+      {
+        page: pagy.page,
+        pages: pagy.pages,
+        page_size: pagy.items,
+        records: pagy.count
+      }
+    end
   end
 end
