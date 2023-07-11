@@ -31,6 +31,15 @@ module Api
         render(json: search_result_serializer, status: :ok)
       end
 
+      def show
+        search_result = SearchResult.find(params[:id])
+        search_result_serializer = SearchResultDetailsSerializer.new(search_result)
+
+        render json: search_result_serializer, status: :ok
+      rescue ActiveRecord::RecordNotFound
+        render_error(detail: I18n.t('activemodel.errors.models.search_result.not_found'), status: :not_found)
+      end
+
       private
 
       def create_search_results_query
