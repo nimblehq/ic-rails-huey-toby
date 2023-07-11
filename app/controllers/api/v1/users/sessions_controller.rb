@@ -12,15 +12,11 @@ module Api
 
         def create
           user = User.find_by(email: user_params[:email])
-          valid_provider = user&.provider == User.providers[:email]
           valid_password = user&.valid_password?(user_params[:password])
 
-          # TODO: Check if user has verified e-mail (#7)
-          if valid_provider && valid_password
-            render_success(user)
-          else
-            render_error
-          end
+          return render_error([I18n.t('devise.failure.invalid', authentication_keys: :email)]) unless valid_password
+
+          render_success(user)
         end
 
         private
@@ -36,12 +32,9 @@ module Api
           render json: token_data, status: :ok
         end
 
-        def render_error
+        def render_error(messages)
           # TODO: return error messages in JSON:API format
-
-          message = [I18n.t('devise.failure.invalid', authentication_keys: :email)]
-
-          render json: { errors: message }, status: :unauthorized
+          render json: { errors: messages }, status: :unauthorized
         end
       end
     end
