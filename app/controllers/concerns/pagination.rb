@@ -12,8 +12,8 @@ module Pagination
 
     def pagination_params
       {
-        page: params.dig(:page, :number) || Pagy::DEFAULT[:page],
-        items: params.dig(:page, :size) || Pagy::DEFAULT[:items]
+        page: params.dig(:page, :number),
+        items: params.dig(:page, :size)
       }
     end
   end
