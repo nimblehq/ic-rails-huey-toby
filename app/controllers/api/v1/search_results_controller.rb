@@ -19,11 +19,7 @@ module Api
       end
 
       def index
-        search_result_list = SearchResultsQuery.new(
-          current_user.search_results, {
-            url_equals: params.dig(:filter, :url_equals)
-          }
-        ).call
+        search_result_list = create_search_results_query
 
         pagy, paginated_results = paginated_resources_for(search_result_list)
 
@@ -33,6 +29,15 @@ module Api
       end
 
       private
+
+      def create_search_results_query
+        SearchResultsQuery.new(
+          current_user.search_results, {
+            url_equals: params.dig(:filter, :url_equals),
+            adwords_url_contains: params.dig(:filter, :adwords_url_contains)
+          }
+        ).call
+      end
 
       def upload_form
         @upload_form ||= UploadForm.new(
@@ -48,15 +53,6 @@ module Api
 
       def render_success(serializer:, status:)
         render json: serializer, status: status
-      end
-
-      def filter_url_equals(search_result_list)
-        url = params.dig(:filter, :url_equals)
-        if url
-          search_result_list.where('? = ANY (adwords_top_urls) OR ? = ANY (non_adwords_urls)', url, url)
-        else
-          search_result_list
-        end
       end
     end
   end
