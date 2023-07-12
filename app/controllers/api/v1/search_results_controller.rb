@@ -3,7 +3,8 @@
 module Api
   module V1
     class SearchResultsController < ApplicationController
-      include Pagination
+      include Paginable
+      include DoorkeeperAuthenticatable
 
       def create
         if upload_form.valid?
@@ -12,7 +13,7 @@ module Api
           message = I18n.t('activemodel.notices.models.search_result.create')
           search_results_serializer = SearchResultsSerializer.new(search_results, meta: { message: message })
 
-          render_success(serializer: search_results_serializer, status: :created)
+          render(json: search_results_serializer, status: :created)
         else
           render_error(detail: upload_form.errors.full_messages, status: :unprocessable_entity)
         end
@@ -24,7 +25,7 @@ module Api
 
         search_result_serializer = SearchResultsSerializer.new(paginated_results, meta: meta_from_pagy(pagy))
 
-        render_success(serializer: search_result_serializer, status: :ok)
+        render(json: search_result_serializer, status: :ok)
       end
 
       private
@@ -39,10 +40,6 @@ module Api
 
       def upload_form_params
         params.permit(:search_engine, :csv_file)
-      end
-
-      def render_success(serializer:, status:)
-        render json: serializer, status: status
       end
     end
   end
