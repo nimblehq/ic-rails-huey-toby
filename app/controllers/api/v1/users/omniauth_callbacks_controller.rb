@@ -8,6 +8,7 @@ module Api
 
         def google_oauth2
           user = User.from_omniauth(auth)
+
           if user.errors.empty?
             render_success(user)
           else

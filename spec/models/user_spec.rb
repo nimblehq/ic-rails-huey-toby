@@ -5,17 +5,14 @@ require 'rails_helper'
 RSpec.describe User, type: :model do
   describe '.from_email' do
     context 'given an existing user is found' do
-      it 'returns the existing user' do
+      it 'returns an error' do
         email = Faker::Internet.email
         password = Faker::Internet.password
-        user = Fabricate(:user,
-                         provider: described_class.providers[:email],
-                         provider_uid: nil,
-                         email: email,
-                         full_name: nil,
-                         avatar_url: nil)
 
-        expect(described_class.from_email(email, password)).to eq(user)
+        described_class.from_email(email, password)
+        user = described_class.from_email(email, password)
+
+        expect(user.errors[:email]).to include('has already been taken')
       end
     end
 
@@ -39,12 +36,8 @@ RSpec.describe User, type: :model do
     context 'given an existing user is found' do
       it 'returns the existing user' do
         auth = OmniAuth::AuthHash.new(Faker::Omniauth.google)
-        user = Fabricate(:user,
-                         provider: auth['provider'],
-                         provider_uid: auth['uid'],
-                         email: auth['info']['email'],
-                         full_name: auth['info']['name'],
-                         avatar_url: auth['info']['image'])
+
+        user = described_class.from_omniauth(auth)
 
         expect(described_class.from_omniauth(auth)).to eq(user)
       end

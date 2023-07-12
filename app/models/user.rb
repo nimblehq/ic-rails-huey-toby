@@ -23,36 +23,19 @@ class User < ApplicationRecord
 
   class << self
     def from_email(email, password)
-      user = find_or_initialize_user(
+      User.create(
         email: email,
         password: password,
         provider: User.providers[:email]
       )
-
-      user.persisted? ? user.errors.add(:email, :taken) : user.save
-
-      user
     end
 
     def from_omniauth(auth)
-      user = find_or_initialize_user(
-        email: auth.info.email,
-        password: Devise.friendly_token[0, 20],
-        provider: auth.provider,
-        auth: auth
-      )
-
-      user.provider == User.providers[:email] ? user.errors.add(:email, :taken) : user.persisted? || user.save
-
-      user
-    end
-
-    def find_or_initialize_user(email:, password:, provider:, auth: nil)
-      User.find_or_initialize_by(email: email) do |new_user|
+      User.find_or_create_by(email: auth.info.email, provider: auth.provider) do |new_user|
         new_user.assign_attributes(
-          email: email,
-          password: password,
-          provider: provider,
+          email: auth.info.email,
+          password: Devise.friendly_token[0, 20],
+          provider: auth.provider,
           provider_uid: auth&.uid,
           full_name: auth&.info&.name,
           avatar_url: auth&.info&.image

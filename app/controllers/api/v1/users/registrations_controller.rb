@@ -10,6 +10,7 @@ module Api
 
         def create
           user = User.from_email(user_params[:email], user_params[:password])
+
           if user.errors.empty?
             render_success(user)
           else
@@ -39,9 +40,9 @@ module Api
         def ensure_valid_client
           # TODO: return error messages in JSON:API format
 
-          @client_app = Doorkeeper::Application.by_uid_and_secret(params[:client_id], params[:client_secret])
+          client_app = Doorkeeper::Application.by_uid_and_secret(params[:client_id], params[:client_secret])
 
-          render json: { errors: I18n.t('doorkeeper.errors.messages.invalid_client') }, status: :forbidden if @client_app.blank?
+          render json: { errors: I18n.t('doorkeeper.errors.messages.invalid_client') }, status: :forbidden if client_app.blank?
         end
       end
     end
