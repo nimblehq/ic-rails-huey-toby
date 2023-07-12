@@ -9,12 +9,13 @@ module Api
         respond_to :json
 
         def create
-          user = User.find_for_database_authentication(email: user_params[:email])
-          valid_password = user&.valid_password?(user_params[:password])
+          user = User.find_by(email: user_params[:email])
 
-          return render_error([I18n.t('devise.failure.invalid', authentication_keys: :email)]) unless valid_password
-
-          render_success(user)
+          if user&.valid_password?(user_params[:password])
+            render_success(user)
+          else
+            render_error([I18n.t('devise.failure.invalid', authentication_keys: :email)])
+          end
         end
 
         private
