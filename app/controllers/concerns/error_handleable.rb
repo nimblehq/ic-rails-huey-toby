@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module ErrorHandler
+module ErrorHandleable
   extend ActiveSupport::Concern
 
   private

@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
-module Pagination
+module Paginable
   extend ActiveSupport::Concern
-
   include Pagy::Backend
 
   included do
