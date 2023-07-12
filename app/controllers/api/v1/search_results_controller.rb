@@ -49,6 +49,15 @@ module Api
       def render_success(serializer:, status:)
         render json: serializer, status: status
       end
+
+      def filter_url_equals(search_result_list)
+        url = params.dig(:filter, :url_equals)
+        if url
+          search_result_list.where('? = ANY (adwords_top_urls) OR ? = ANY (non_adwords_urls)', url, url)
+        else
+          search_result_list
+        end
+      end
     end
   end
 end
