@@ -20,6 +20,8 @@ module Api
 
       def index
         search_result_list = current_user.search_results.order(:id)
+        search_result_list = filter_url_equals(search_result_list)
+
         pagy, paginated_results = paginated_resources_for(search_result_list)
 
         search_result_serializer = SearchResultsSerializer.new(paginated_results, meta: meta_from_pagy(pagy))
@@ -43,6 +45,15 @@ module Api
 
       def render_success(serializer:, status:)
         render json: serializer, status: status
+      end
+
+      def filter_url_equals(search_result_list)
+        url = params.dig(:filter, :url_equals)
+        if url
+          search_result_list.where('? = ANY (adwords_top_urls) OR ? = ANY (non_adwords_urls)', url, url)
+        else
+          search_result_list
+        end
       end
     end
   end
