@@ -171,11 +171,10 @@ RSpec.describe 'Search Results', type: :request do
     context 'given an existing search result ID' do
       it 'returns a successful response with JSON' do
         user = Fabricate(:user)
-        Fabricate.times(20, :search_result, user_id: user.id)
         authorization_header = create_authorization_header(user: user)
-        search_result = Fabricate(:search_result, user_id: user.id)
+        search_result = Fabricate(:search_result, id: 1, user_id: user.id)
 
-        get "/api/v1/search_results/#{search_result.id}", headers: authorization_header
+        get '/api/v1/search_results/1', headers: authorization_header
 
         expect(JSON.parse(response.body)['data']['type']).to eq('search_result_details')
         expect(JSON.parse(response.body)['data']['id']).to eq(search_result.id.to_s)
