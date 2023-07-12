@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_07_07_024057) do
+ActiveRecord::Schema.define(version: 2023_07_10_023912) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -77,7 +77,7 @@ ActiveRecord::Schema.define(version: 2023_07_07_024057) do
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "full_name"
-    t.string "uid"
+    t.string "provider_uid"
     t.string "avatar_url"
     t.string "provider"
     t.string "reset_password_token"

@@ -26,13 +26,14 @@ module Api
       end
 
       def render_success(search_results)
-        data = SearchResultsSerializer.new(search_results).serializable_hash[:data]
-        message = I18n.t('activemodel.notices.models.search_result.create')
+        success_message = I18n.t('activemodel.notices.models.search_result.create')
+        search_results_data = SearchResultsSerializer.new(search_results, meta: { message: success_message })
 
-        render json: { data: data, meta: { message: message } }, status: :created
+        render json: search_results_data, status: :created
       end
 
       def render_failed(upload_form)
+        # TODO: return error messages in JSON:API format
         render json: { errors: upload_form.errors.full_messages }, status: :unprocessable_entity
       end
     end
