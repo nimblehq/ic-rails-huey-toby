@@ -8,8 +8,6 @@ module Api
 
         respond_to :json
 
-        before_action :ensure_valid_client
-
         def create
           user = User.from_email(user_params[:email], user_params[:password])
 

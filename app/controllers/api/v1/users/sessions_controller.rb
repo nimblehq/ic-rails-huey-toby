@@ -8,10 +8,8 @@ module Api
 
         respond_to :json
 
-        before_action :ensure_valid_client
-
         def create
-          user = User.find_by(email: user_params[:email])
+          user = User.find_for_database_authentication(email: user_params[:email])
           valid_password = user&.valid_password?(user_params[:password])
 
           return render_error([I18n.t('devise.failure.invalid', authentication_keys: :email)]) unless valid_password
