@@ -3,7 +3,7 @@
 module Api
   module V1
     class ExportsController < ApplicationController
-      include DoorkeeperAuthenticatable
+      include HasDoorkeeperAuthentication
 
       def index
         search_result = SearchResult.find_by(id: params[:search_result_id])
