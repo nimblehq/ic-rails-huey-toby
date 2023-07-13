@@ -33,12 +33,16 @@ module Api
       end
 
       def show
-        search_result = SearchResult.find(params[:id])
+        search_result = SearchResult.find_by(id: params[:id])
+
+        unless search_result
+          raise IcRailsHueyToby::Errors::RecordNotFound,
+                I18n.t('activemodel.errors.models.search_result.not_found')
+        end
+
         search_result_details_serializer = SearchResultDetailsSerializer.new(search_result)
 
         render(json: search_result_details_serializer, status: :ok)
-      rescue ActiveRecord::RecordNotFound
-        render_error(detail: I18n.t('activemodel.errors.models.search_result.not_found'), status: :not_found)
       end
 
       private
