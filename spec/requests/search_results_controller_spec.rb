@@ -12,7 +12,7 @@ RSpec.describe 'Search Results', type: :request do
 
           post '/api/v1/upload', headers: authorization_header, params: params
 
-          expect(JSON.parse(response.body)['data'][0]['type']).to eq('search_results')
+          expect(JSON.parse(response.body)['data'][0]['type']).to eq('search_result')
           expect(JSON.parse(response.body)['meta']['message']).to eq(I18n.t('activemodel.notices.models.search_result.create'))
           expect(response).to have_http_status(:created)
         end
@@ -102,7 +102,7 @@ RSpec.describe 'Search Results', type: :request do
 
           get '/api/v1/search_results', headers: authorization_header
 
-          expect(JSON.parse(response.body)['data'][0]['type']).to eq('search_results')
+          expect(JSON.parse(response.body)['data'][0]['type']).to eq('search_result')
           expect(JSON.parse(response.body)['meta']['page']).to eq(1)
           expect(JSON.parse(response.body)['meta']['pages']).to eq(2)
           expect(JSON.parse(response.body)['meta']['page_size']).to eq(10)
@@ -120,7 +120,7 @@ RSpec.describe 'Search Results', type: :request do
 
           get '/api/v1/search_results', headers: authorization_header, params: params
 
-          expect(JSON.parse(response.body)['data'][0]['type']).to eq('search_results')
+          expect(JSON.parse(response.body)['data'][0]['type']).to eq('search_result')
           expect(JSON.parse(response.body)['meta']['page']).to eq(1)
           expect(JSON.parse(response.body)['meta']['pages']).to eq(1)
           expect(JSON.parse(response.body)['meta']['page_size']).to eq(20)
