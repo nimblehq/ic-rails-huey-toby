@@ -22,7 +22,12 @@ module Api
       end
 
       def index
-        search_result_list = current_user.search_results.order(:id)
+        search_result_list = SearchResultsQuery.new(
+          current_user.search_results, {
+            url_equals: params.dig(:filter, :url_equals)
+          }
+        ).call
+
         pagy, paginated_results = paginated_resources_for(search_result_list)
 
         search_result_serializer = SearchResultsSerializer.new(paginated_results, meta: meta_from_pagy(pagy))
