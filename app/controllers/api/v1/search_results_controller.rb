@@ -3,8 +3,8 @@
 module Api
   module V1
     class SearchResultsController < ApplicationController
-      include Paginable
-      include DoorkeeperAuthenticatable
+      include HasPagination
+      include HasDoorkeeperAuthentication
 
       def create
         if upload_form.valid?

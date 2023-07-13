@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
-module DoorkeeperAuthenticatable
+module HasDoorkeeperAuthentication
   extend ActiveSupport::Concern
-  include ErrorHandleable
 
   included do
     before_action :doorkeeper_authorize!
