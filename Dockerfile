@@ -15,7 +15,8 @@ ENV BUILD_ENV=$BUILD_ENV \
     LC_ALL="en_US.UTF-8" \
     LANGUAGE="en_US:en" \
     NODE_ENV=$NODE_ENV \
-    NODE_VERSION=16
+    NODE_VERSION=16 \
+    PUPPETEER_EXECUTABLE_PATH="/usr/bin/google-chrome"
 
 RUN apt-get update -qq && \
     apt-get install -y --no-install-recommends apt-transport-https curl gnupg net-tools && \
@@ -73,6 +74,10 @@ RUN gem install bundler && \
       bundle config set without 'development test' ; \
     fi && \
     bundle install
+
+# Install JS dependencies
+COPY package.json yarn.lock .yarnrc ./
+RUN yarn install
 
 # Copying the app files must be placed after the dependencies setup
 # since the app files always change thus cannot be cached
