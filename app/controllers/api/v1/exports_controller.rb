@@ -3,11 +3,16 @@
 module Api
   module V1
     class ExportsController < ApplicationController
-      before_action :doorkeeper_authorize!
+      include DoorkeeperAuthenticatable
 
       def index
-        # TODO: Check if search result belongs to current user
-        search_result = SearchResult.find(params[:search_result_id])
+        search_result = SearchResult.find_by(id: params[:search_result_id])
+
+        unless search_result
+          raise IcRailsHueyToby::Errors::RecordNotFound,
+                I18n.t('activemodel.errors.models.search_result.not_found')
+        end
+
         grover = Grover.new(search_result.html_code).to_pdf
 
         send_data(grover, filename: 'export.pdf', type: 'application/pdf', disposition: 'attachment')
