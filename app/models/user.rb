@@ -13,6 +13,8 @@ class User < ApplicationRecord
            dependent: :delete_all,
            inverse_of: :user
 
+  has_many :search_results, dependent: :destroy
+
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable,
          :doorkeeper, :omniauthable, omniauth_providers: [:google_oauth2]

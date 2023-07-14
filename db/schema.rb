@@ -71,6 +71,8 @@ ActiveRecord::Schema.define(version: 2023_07_10_023912) do
     t.integer "non_adwords_count"
     t.string "non_adwords_urls", array: true
     t.integer "total_links_count"
+    t.uuid "user_id"
+    t.index ["user_id"], name: "index_search_results_on_user_id"
   end
 
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -92,4 +94,5 @@ ActiveRecord::Schema.define(version: 2023_07_10_023912) do
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "users", column: "resource_owner_id"
+  add_foreign_key "search_results", "users"
 end
