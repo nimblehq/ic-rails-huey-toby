@@ -6,12 +6,7 @@ module Api
       include HasDoorkeeperAuthentication
 
       def index
-        search_result = SearchResult.find_by(id: params[:search_result_id])
-
-        unless search_result
-          raise IcRailsHueyToby::Errors::RecordNotFound,
-                I18n.t('activemodel.errors.models.search_result.not_found')
-        end
+        search_result = SearchResult.find(params[:search_result_id])
 
         grover = Grover.new(search_result.html_code).to_pdf
 
