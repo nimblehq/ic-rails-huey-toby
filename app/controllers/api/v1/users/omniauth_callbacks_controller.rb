@@ -12,7 +12,7 @@ module Api
           if user.errors.empty?
             render_success(user)
           else
-            render_error(user)
+            render_error(detail: user.errors.full_messages, status: :internal_server_error)
           end
         end
 
@@ -27,11 +27,6 @@ module Api
           token_data = OauthTokenSerializer.new(oauth_token)
 
           render json: token_data, status: :ok
-        end
-
-        def render_error(user)
-          # TODO: return error messages in JSON:API format
-          render json: { errors: user.errors.full_messages }, status: :internal_server_error
         end
       end
     end
