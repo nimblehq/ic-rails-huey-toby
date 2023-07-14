@@ -1,0 +1,10 @@
+{
+  "name": "ic_rails_huey_toby",
+  "private": "true",
+  "engines": {
+    "node": "^16"
+  },
+  "dependencies": {
+    "puppeteer": "^20.7.4"
+  }
+}
