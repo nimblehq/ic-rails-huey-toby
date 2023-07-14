@@ -8,4 +8,6 @@ Fabricator(:user) do
   password { Faker::Internet.password }
   full_name { Faker::Name.name }
   avatar_url { Faker::Avatar.image }
+  confirmed_at { Time.current }
+  confirmation_sent_at { Time.current }
 end
