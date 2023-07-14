@@ -19,11 +19,7 @@ module Api
       end
 
       def index
-        search_result_list = SearchResultsQuery.new(
-          current_user.search_results, {
-            url_equals: params.dig(:filter, :url_equals)
-          }
-        ).call
+        search_result_list = create_search_results_query
 
         pagy, paginated_results = paginated_resources_for(search_result_list)
 
@@ -33,6 +29,15 @@ module Api
       end
 
       private
+
+      def create_search_results_query
+        SearchResultsQuery.new(
+          current_user.search_results, {
+            url_equals: params.dig(:filter, :url_equals),
+            adwords_url_contains: params.dig(:filter, :adwords_url_contains)
+          }
+        ).call
+      end
 
       def upload_form
         @upload_form ||= UploadForm.new(
