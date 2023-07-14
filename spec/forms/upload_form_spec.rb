@@ -10,7 +10,8 @@ RSpec.describe UploadForm, type: :model do
       it 'is valid' do
         upload_form = described_class.new(
           search_engine: 'google',
-          csv_file: fixture_file_upload('upload_valid.csv', 'text/csv')
+          csv_file: fixture_file_upload('upload_valid.csv', 'text/csv'),
+          user_id: 'user_id'
         )
 
         expect(upload_form).to be_valid
@@ -21,7 +22,8 @@ RSpec.describe UploadForm, type: :model do
       it 'is invalid' do
         upload_form = described_class.new(
           search_engine: nil,
-          csv_file: fixture_file_upload('upload_valid.csv', 'text/csv')
+          csv_file: fixture_file_upload('upload_valid.csv', 'text/csv'),
+          user_id: 'user_id'
         )
 
         expect(upload_form).not_to be_valid
@@ -33,7 +35,8 @@ RSpec.describe UploadForm, type: :model do
       it 'is invalid' do
         upload_form = described_class.new(
           search_engine: 'yahoo',
-          csv_file: fixture_file_upload('upload_valid.csv', 'text/csv')
+          csv_file: fixture_file_upload('upload_valid.csv', 'text/csv'),
+          user_id: 'user_id'
         )
 
         expect(upload_form).not_to be_valid
@@ -45,7 +48,8 @@ RSpec.describe UploadForm, type: :model do
       it 'is invalid' do
         upload_form = described_class.new(
           search_engine: 'google',
-          csv_file: nil
+          csv_file: nil,
+          user_id: 'user_id'
         )
 
         expect(upload_form).not_to be_valid
@@ -57,7 +61,8 @@ RSpec.describe UploadForm, type: :model do
       it 'is invalid' do
         upload_form = described_class.new(
           search_engine: 'google',
-          csv_file: fixture_file_upload('upload_invalid_extension.txt', 'text/plain')
+          csv_file: fixture_file_upload('upload_invalid_extension.txt', 'text/plain'),
+          user_id: 'user_id'
         )
 
         expect(upload_form).not_to be_valid
@@ -69,11 +74,25 @@ RSpec.describe UploadForm, type: :model do
       it 'is invalid' do
         upload_form = described_class.new(
           search_engine: 'google',
-          csv_file: fixture_file_upload('upload_invalid_count.csv', 'text/csv')
+          csv_file: fixture_file_upload('upload_invalid_count.csv', 'text/csv'),
+          user_id: 'user_id'
         )
 
         expect(upload_form).not_to be_valid
         expect(upload_form.errors[:csv_file]).to eq([I18n.t('activemodel.errors.models.upload_form.attributes.csv_file.invalid_count')])
+      end
+    end
+
+    context 'given INVALID user_id' do
+      it 'is invalid' do
+        upload_form = described_class.new(
+          search_engine: 'google',
+          csv_file: fixture_file_upload('upload_valid.csv', 'text/csv'),
+          user_id: nil
+        )
+
+        expect(upload_form).not_to be_valid
+        expect(upload_form.errors[:user_id]).to include("can't be blank")
       end
     end
   end
@@ -81,9 +100,13 @@ RSpec.describe UploadForm, type: :model do
   describe '#save' do
     context 'given valid attributes' do
       it 'runs search keyword jobs' do
+        user = Fabricate(:user)
+        Fabricate.times(20, :search_result, user_id: user.id)
+
         upload_form = described_class.new(
           search_engine: 'google',
-          csv_file: fixture_file_upload('upload_valid.csv', 'text/csv')
+          csv_file: fixture_file_upload('upload_valid.csv', 'text/csv'),
+          user_id: user.id
         )
 
         expect { upload_form.save }.to have_enqueued_job(SearchKeywordJob).exactly(6).times
@@ -92,9 +115,13 @@ RSpec.describe UploadForm, type: :model do
 
     context 'given valid attributes with massive list of keywords' do
       it 'runs search keyword jobs with random delay' do
+        user = Fabricate(:user)
+        Fabricate.times(20, :search_result, user_id: user.id)
+
         upload_form = described_class.new(
           search_engine: 'google',
-          csv_file: fixture_file_upload('upload_valid_massive_keywords.csv', 'text/csv')
+          csv_file: fixture_file_upload('upload_valid_massive_keywords.csv', 'text/csv'),
+          user_id: user.id
         )
 
         allow(upload_form).to receive(:generate_delay_in_seconds).and_return(5)
@@ -108,7 +135,8 @@ RSpec.describe UploadForm, type: :model do
       it 'raises an error' do
         upload_form = described_class.new(
           search_engine: 'yahoo',
-          csv_file: fixture_file_upload('upload_valid.csv', 'text/csv')
+          csv_file: fixture_file_upload('upload_valid.csv', 'text/csv'),
+          user_id: 'user_id'
         )
 
         expect { upload_form.save }.to raise_error(ActiveRecord::RecordInvalid)

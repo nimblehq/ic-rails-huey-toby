@@ -13,28 +13,36 @@ class User < ApplicationRecord
            dependent: :delete_all,
            inverse_of: :user
 
+  has_many :search_results, dependent: :destroy
+
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable,
          :doorkeeper, :omniauthable, omniauth_providers: [:google_oauth2]
 
+  enum provider: { email: 'email', google_oauth2: 'google_oauth2' }
+
+  validates :provider, inclusion: { in: providers.keys }
+
   class << self
-    def from_omniauth(auth)
-      User.find_or_create_by(provider: auth.provider, uid: auth.uid, email: auth.info.email) do |user|
-        set_user_attributes(user, auth)
-      end
+    def from_email(email, password)
+      User.create(
+        email: email,
+        password: password,
+        provider: User.providers[:email]
+      )
     end
 
-    private
-
-    def set_user_attributes(user, auth)
-      user.provider = auth.provider
-      user.uid = auth.uid
-
-      profile = auth.info
-      user.email = profile.email
-      user.password = Devise.friendly_token[0, 20]
-      user.full_name = profile.name
-      user.avatar_url = profile&.image
+    def from_omniauth(auth)
+      User.find_or_create_by(email: auth.info.email, provider: auth.provider) do |new_user|
+        new_user.assign_attributes(
+          email: auth.info.email,
+          password: Devise.friendly_token[0, 20],
+          provider: auth.provider,
+          provider_uid: auth&.uid,
+          full_name: auth&.info&.name,
+          avatar_url: auth&.info&.image
+        )
+      end
     end
   end
 end

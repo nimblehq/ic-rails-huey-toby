@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-class SearchResultsSerializer
-  include JSONAPI::Serializer
-
+class SearchResultsSerializer < ApplicationSerializer
   attributes :keyword, :search_engine, :status
 end

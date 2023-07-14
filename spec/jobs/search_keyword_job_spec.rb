@@ -8,7 +8,8 @@ RSpec.describe SearchKeywordJob, type: :job do
   describe '#perform' do
     context 'given a valid request' do
       it 'updates the keyword status as completed', vcr: 'services/search/google/valid' do
-        search_result = SearchResult.create(keyword: 'tivi', search_engine: 'google')
+        user = Fabricate(:user)
+        search_result = SearchResult.create(keyword: 'tivi', search_engine: 'google', user: user)
 
         expect(search_result.status).to eq('in_progress')
 
@@ -19,7 +20,8 @@ RSpec.describe SearchKeywordJob, type: :job do
       end
 
       it 'updates the adwords_top_urls with the parsed content from the search page', vcr: 'services/search/google/valid' do
-        search_result = SearchResult.create(keyword: 'tivi', search_engine: 'google')
+        user = Fabricate(:user)
+        search_result = SearchResult.create(keyword: 'tivi', search_engine: 'google', user: user)
 
         expect { described_class.perform_now(search_result.id) }
           .to change { search_result.reload.adwords_top_urls }
@@ -32,7 +34,8 @@ RSpec.describe SearchKeywordJob, type: :job do
       end
 
       it 'updates the adwords_top_count with the parsed content from the search page', vcr: 'services/search/google/valid' do
-        search_result = SearchResult.create(keyword: 'tivi', search_engine: 'google')
+        user = Fabricate(:user)
+        search_result = SearchResult.create(keyword: 'tivi', search_engine: 'google', user: user)
 
         expect { described_class.perform_now(search_result.id) }
           .to change { search_result.reload.adwords_top_count }
@@ -40,7 +43,8 @@ RSpec.describe SearchKeywordJob, type: :job do
       end
 
       it 'updates the adwords_total_count with the parsed content from the search page', vcr: 'services/search/google/valid' do
-        search_result = SearchResult.create(keyword: 'tivi', search_engine: 'google')
+        user = Fabricate(:user)
+        search_result = SearchResult.create(keyword: 'tivi', search_engine: 'google', user: user)
 
         expect { described_class.perform_now(search_result.id) }
           .to change { search_result.reload.adwords_total_count }
@@ -48,7 +52,8 @@ RSpec.describe SearchKeywordJob, type: :job do
       end
 
       it 'updates the non_adwords_urls with the parsed content from the search page', vcr: 'services/search/google/valid' do
-        search_result = SearchResult.create(keyword: 'tivi', search_engine: 'google')
+        user = Fabricate(:user)
+        search_result = SearchResult.create(keyword: 'tivi', search_engine: 'google', user: user)
 
         expect { described_class.perform_now(search_result.id) }
           .to change { search_result.reload.non_adwords_urls }
@@ -66,7 +71,8 @@ RSpec.describe SearchKeywordJob, type: :job do
       end
 
       it 'updates the non_adwords_count with the parsed content from the search page', vcr: 'services/search/google/valid' do
-        search_result = SearchResult.create(keyword: 'tivi', search_engine: 'google')
+        user = Fabricate(:user)
+        search_result = SearchResult.create(keyword: 'tivi', search_engine: 'google', user: user)
 
         expect { described_class.perform_now(search_result.id) }
           .to change { search_result.reload.non_adwords_count }
@@ -74,7 +80,8 @@ RSpec.describe SearchKeywordJob, type: :job do
       end
 
       it 'updates the total_links_count with the parsed content from the search page', vcr: 'services/search/google/valid' do
-        search_result = SearchResult.create(keyword: 'tivi', search_engine: 'google')
+        user = Fabricate(:user)
+        search_result = SearchResult.create(keyword: 'tivi', search_engine: 'google', user: user)
 
         expect { described_class.perform_now(search_result.id) }
           .to change { search_result.reload.total_links_count }
@@ -84,7 +91,8 @@ RSpec.describe SearchKeywordJob, type: :job do
 
     context 'given NO html code is returned' do
       it 'updates the keyword status as failed' do
-        search_result = SearchResult.create(keyword: 'keyword', search_engine: 'google')
+        user = Fabricate(:user)
+        search_result = SearchResult.create(keyword: 'keyword', search_engine: 'google', user: user)
         search_service = Search::SearchService.new(keyword: 'keyword', search_engine: 'google')
         allow(Search::SearchService).to receive(:new).and_return(search_service)
         allow(search_service).to receive(:search).and_return(nil)
@@ -95,7 +103,8 @@ RSpec.describe SearchKeywordJob, type: :job do
 
     context 'given SearchServiceError is raised' do
       it 'updates the keyword status as failed' do
-        search_result = SearchResult.create(keyword: 'keyword', search_engine: 'google')
+        user = Fabricate(:user)
+        search_result = SearchResult.create(keyword: 'keyword', search_engine: 'google', user: user)
         search_service = Search::SearchService.new(keyword: 'keyword', search_engine: 'google')
         allow(Search::SearchService).to receive(:new).and_return(search_service)
         allow(search_service).to receive(:search).and_raise(IcRailsHueyToby::Errors::SearchServiceError)
