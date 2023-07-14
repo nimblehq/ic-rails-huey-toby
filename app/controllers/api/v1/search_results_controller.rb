@@ -6,6 +6,8 @@ module Api
       include HasPagination
       include HasDoorkeeperAuthentication
 
+      skip_before_action :ensure_valid_client
+
       def create
         if upload_form.valid?
           search_results = upload_form.save

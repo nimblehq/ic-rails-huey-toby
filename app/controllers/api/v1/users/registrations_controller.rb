@@ -4,9 +4,11 @@ module Api
   module V1
     module Users
       class RegistrationsController < Devise::RegistrationsController
-        include ValidClientConcern
+        include HasDoorkeeperAuthentication
 
         respond_to :json
+
+        skip_before_action :doorkeeper_authorize!
 
         def create
           user = User.from_email(user_params[:email], user_params[:password])
