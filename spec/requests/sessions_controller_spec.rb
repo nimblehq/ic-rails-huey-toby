@@ -6,8 +6,7 @@ RSpec.describe 'Sessions', type: :request do
   describe 'POST #create' do
     context 'given a valid e-mail' do
       it 'returns a successful response with JSON' do
-        application = Fabricate(:application)
-        allow(Doorkeeper::Application).to receive(:first).and_return(application)
+        Fabricate(:application)
 
         user = Fabricate(:user, provider: User.providers[:email])
 
@@ -24,8 +23,7 @@ RSpec.describe 'Sessions', type: :request do
 
     context 'given an INVALID e-mail' do
       it 'returns an unauthorized response with JSON' do
-        application = Fabricate(:application)
-        allow(Doorkeeper::Application).to receive(:first).and_return(application)
+        Fabricate(:application)
 
         user = Fabricate(:user, provider: User.providers[:email])
 
@@ -42,8 +40,7 @@ RSpec.describe 'Sessions', type: :request do
 
     context 'given an INVALID password' do
       it 'returns an unauthorized response with JSON' do
-        application = Fabricate(:application)
-        allow(Doorkeeper::Application).to receive(:first).and_return(application)
+        Fabricate(:application)
 
         user = Fabricate(:user, provider: User.providers[:email])
 
@@ -60,8 +57,7 @@ RSpec.describe 'Sessions', type: :request do
 
     context 'given an INVALID client' do
       it 'returns a forbidden response with JSON' do
-        application = Fabricate(:application)
-        allow(Doorkeeper::Application).to receive(:first).and_return(application)
+        Fabricate(:application)
 
         user = Fabricate(:user, provider: User.providers[:email])
 
