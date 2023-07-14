@@ -58,7 +58,7 @@ RSpec.describe 'Registrations', type: :request do
         }
 
         expect(response).to have_http_status(:forbidden)
-        expect(JSON.parse(response.body)['errors']).to eq(I18n.t('doorkeeper.errors.messages.invalid_client'))
+        expect(JSON.parse(response.body)['errors'][0]['detail']).to eq(I18n.t('doorkeeper.errors.messages.invalid_client'))
       end
     end
   end

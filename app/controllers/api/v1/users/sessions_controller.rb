@@ -16,7 +16,7 @@ module Api
           if user&.valid_password?(user_params[:password])
             render_success(user)
           else
-            render_error([I18n.t('devise.failure.invalid', authentication_keys: :email)])
+            render_error(detail: [I18n.t('devise.failure.invalid', authentication_keys: :email)], status: :unauthorized)
           end
         end
 
@@ -31,11 +31,6 @@ module Api
           token_data = OauthTokenSerializer.new(oauth_token)
 
           render json: token_data, status: :ok
-        end
-
-        def render_error(messages)
-          # TODO: return error messages in JSON:API format
-          render json: { errors: messages }, status: :unauthorized
         end
       end
     end

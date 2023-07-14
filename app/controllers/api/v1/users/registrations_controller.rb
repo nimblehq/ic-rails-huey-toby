@@ -16,7 +16,7 @@ module Api
           if user.errors.empty?
             render_success(user)
           else
-            render_error(user)
+            render_error(detail: user.errors.full_messages, status: :unprocessable_entity)
           end
         end
 
@@ -31,12 +31,6 @@ module Api
           user_data = UserSerializer.new(user, meta: { message: success_message })
 
           render json: user_data, status: :created
-        end
-
-        def render_error(user)
-          # TODO: return error messages in JSON:API format
-
-          render json: { errors: user.errors.full_messages }, status: :unprocessable_entity
         end
       end
     end
