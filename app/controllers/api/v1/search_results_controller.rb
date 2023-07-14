@@ -32,12 +32,7 @@ module Api
       end
 
       def show
-        search_result = SearchResult.find_by(id: params[:id])
-
-        unless search_result
-          raise IcRailsHueyToby::Errors::RecordNotFound,
-                I18n.t('activemodel.errors.models.search_result.not_found')
-        end
+        search_result = SearchResult.find(params[:id])
 
         search_result_details_serializer = SearchResultSerializer.new(search_result)
 
