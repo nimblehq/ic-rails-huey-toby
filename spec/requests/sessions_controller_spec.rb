@@ -55,6 +55,42 @@ RSpec.describe 'Sessions', type: :request do
       end
     end
 
+    context 'given an INVALID provider' do
+      it 'returns an unauthorized response with JSON' do
+        application = Fabricate(:application)
+        allow(Doorkeeper::Application).to receive(:first).and_return(application)
+
+        user = Fabricate(:user, provider: User.providers[:google_oauth2])
+
+        post '/api/v1/users/sign_in', params: {
+          user: { email: user.email, password: user.password },
+          client_id: 'client_id',
+          client_secret: 'client_secret'
+        }
+
+        expect(response).to have_http_status(:unauthorized)
+        expect(JSON.parse(response.body)['errors'][0]['detail']).to include(I18n.t('devise.failure.invalid', authentication_keys: :email))
+      end
+    end
+
+    context 'given the e-mail has NOT been confirmed yet' do
+      it 'returns an unauthorized response with JSON' do
+        application = Fabricate(:application)
+        allow(Doorkeeper::Application).to receive(:first).and_return(application)
+
+        user = Fabricate(:user, provider: User.providers[:email], confirmed_at: nil)
+
+        post '/api/v1/users/sign_in', params: {
+          user: { email: user.email, password: user.password },
+          client_id: 'client_id',
+          client_secret: 'client_secret'
+        }
+
+        expect(response).to have_http_status(:unauthorized)
+        expect(JSON.parse(response.body)['errors'][0]['detail']).to include(I18n.t('devise.failure.unconfirmed'))
+      end
+    end
+
     context 'given an INVALID client' do
       it 'returns a forbidden response with JSON' do
         Fabricate(:application)

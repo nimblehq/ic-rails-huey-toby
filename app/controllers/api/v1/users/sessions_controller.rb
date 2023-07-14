@@ -11,12 +11,15 @@ module Api
         skip_before_action :doorkeeper_authorize!
 
         def create
-          user = User.find_by(email: user_params[:email])
+          user = User.find_by(email: user_params[:email], provider: User.providers[:email])
+          valid_password = user&.valid_password?(user_params[:password])
 
-          if user&.valid_password?(user_params[:password])
-            render_success(user)
+          if !valid_password
+            render_invalid_password_error
+          elsif !user.confirmed?
+            render_unconfirmed_user_error
           else
-            render_error(detail: [I18n.t('devise.failure.invalid', authentication_keys: :email)], status: :unauthorized)
+            render_success(user)
           end
         end
 
@@ -31,6 +34,20 @@ module Api
           token_data = OauthTokenSerializer.new(oauth_token)
 
           render json: token_data, status: :ok
+        end
+
+        def render_invalid_password_error
+          render_error(
+            detail: [I18n.t('devise.failure.invalid', authentication_keys: :email)],
+            status: :unauthorized
+          )
+        end
+
+        def render_unconfirmed_user_error
+          render_error(
+            detail: [I18n.t('devise.failure.unconfirmed')],
+            status: :unauthorized
+          )
         end
       end
     end

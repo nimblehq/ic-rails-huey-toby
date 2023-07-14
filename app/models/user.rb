@@ -16,7 +16,7 @@ class User < ApplicationRecord
   has_many :search_results, dependent: :destroy
 
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable,
+         :recoverable, :rememberable, :validatable, :confirmable,
          :doorkeeper, :omniauthable, omniauth_providers: [:google_oauth2]
 
   enum provider: { email: 'email', google_oauth2: 'google_oauth2' }
