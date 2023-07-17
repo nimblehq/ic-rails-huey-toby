@@ -55,6 +55,7 @@ group :development, :test do
 
   # Utilities
   gem 'figaro' # Simple Rails app configuration
+  gem 'mailgun-ruby' # Contains methods for easily interacting with the Mailgun API
   gem 'listen' # Listens to file modifications
   gem 'letter_opener' # Preview mail in the browser instead of sending
   gem 'faker'
