@@ -13,7 +13,7 @@ env:
   DOCKER_REGISTRY_USERNAME: ${{ github.repository_owner }}
   DOCKER_REGISTRY_TOKEN: ${{ secrets.DOCKER_REGISTRY_TOKEN }}
   DOCKER_IMAGE: ${{ github.repository }}
-  NODE_VERSION: 20
+  NODE_VERSION: 18
 
   # Set the default docker-compose file
   COMPOSE_FILE: docker-compose.test.yml
@@ -136,19 +136,6 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'yarn'
-
-      - name: Cache Node modules
-        id: node-modules-cache
-        uses: actions/cache@v3
-        with:
-            path: node_modules
-            key: ${{ runner.os }}-nodemodules-${{ hashFiles('**/yarn.lock') }}
-            restore-keys: |
-              ${{ runner.os }}-nodemodules-
-
-      - name: Yarn install
-        if: steps.node-modules-cache.outputs.cache-hit != 'true'
-        run: yarn
 
       - name: Run Undercover
         run: bundle exec undercover-report
