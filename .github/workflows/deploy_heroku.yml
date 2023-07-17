@@ -53,7 +53,7 @@ jobs:
           password: ${{ env.DOCKER_REGISTRY_TOKEN }}
 
       - name: Build Docker image
-        run: bin/docker-prepare && docker compose build --no-cache
+        run: bin/docker-prepare && docker compose build
 
       - name: Push Docker image
         run: docker compose push web
