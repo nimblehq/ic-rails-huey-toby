@@ -5,7 +5,9 @@ module Api
     class ExportsController < ApplicationController
       include HasDoorkeeperAuthentication
 
-      def index
+      skip_before_action :ensure_valid_client
+
+      def show
         search_result = SearchResult.find(params[:search_result_id])
 
         grover = Grover.new(search_result.html_code).to_pdf

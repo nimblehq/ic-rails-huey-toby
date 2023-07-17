@@ -10,7 +10,7 @@ RSpec.describe 'Exports', type: :request do
         authorization_header = create_authorization_header(user: user)
         search_result = Fabricate(:search_result, user_id: user.id)
 
-        get '/api/v1/export', headers: authorization_header, params: { search_result_id: search_result.id }
+        get "/api/v1/search_results/#{search_result.id}/export", headers: authorization_header
 
         expect(response.content_type).to eq('application/pdf')
         expect(response).to have_http_status(:ok)
@@ -22,16 +22,16 @@ RSpec.describe 'Exports', type: :request do
         user = Fabricate(:user)
         authorization_header = create_authorization_header(user: user)
 
-        get '/api/v1/export', headers: authorization_header, params: { search_result_id: 'invalid_id' }
+        get '/api/v1/search_results/1/export', headers: authorization_header
 
-        expect(JSON.parse(response.body)['errors'][0]['detail']).to eq(I18n.t('activemodel.errors.models.search_result.not_found'))
+        expect(JSON.parse(response.body)['errors'][0]['detail']).to eq('No Search result found.')
         expect(response).to have_http_status(:not_found)
       end
     end
 
     context 'given an UNAUTHENTICATED user' do
       it 'returns an unauthorized response with JSON' do
-        get '/api/v1/export?search_result_id=1'
+        get '/api/v1/search_results/1/export'
 
         expect(JSON.parse(response.body)['errors'][0]['detail']).to eq('The access token is invalid')
         expect(JSON.parse(response.body)['errors'][0]['code']).to eq('invalid_token')
