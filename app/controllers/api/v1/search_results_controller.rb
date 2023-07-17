@@ -26,17 +26,17 @@ module Api
 
         pagy, paginated_result_list = paginated_resources_for(search_result_list)
 
-        search_result_serializer = SearchResultListSerializer.new(paginated_result_list, meta: meta_from_pagy(pagy))
+        search_result_list_serializer = SearchResultListSerializer.new(paginated_result_list, meta: meta_from_pagy(pagy))
 
-        render(json: search_result_serializer, status: :ok)
+        render(json: search_result_list_serializer, status: :ok)
       end
 
       def show
         search_result = SearchResult.find(params[:id])
 
-        search_result_details_serializer = SearchResultSerializer.new(search_result)
+        search_result_serializer = SearchResultSerializer.new(search_result)
 
-        render(json: search_result_details_serializer, status: :ok)
+        render(json: search_result_serializer, status: :ok)
       end
 
       private

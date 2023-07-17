@@ -190,7 +190,7 @@ RSpec.describe 'Search Results', type: :request do
 
         get '/api/v1/search_results/9999', headers: authorization_header
 
-        expect(JSON.parse(response.body)['errors'][0]['detail']).to eq(I18n.t('activemodel.errors.models.search_result.not_found'))
+        expect(JSON.parse(response.body)['errors'][0]['detail']).to eq('No Search result found.')
         expect(response).to have_http_status(:not_found)
       end
     end

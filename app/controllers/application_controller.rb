@@ -7,11 +7,8 @@ class ApplicationController < ActionController::API
   rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
 
   def record_not_found(exception)
-    message = if exception.model == 'SearchResult'
-                I18n.t('activemodel.errors.models.search_result.not_found')
-              else
-                exception.message
-              end
+    model_name = exception.model.constantize.model_name.human
+    message = I18n.t('activemodel.errors.not_found', model_name: model_name)
 
     render_error(detail: message, status: :not_found)
   end

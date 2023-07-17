@@ -13,5 +13,4 @@ en:
             csv_file:
               invalid_extension: "is invalid, must have .csv extension."
               invalid_count: "is invalid, must have 1-1000 keywords."
-        search_result:
-          not_found: "No search results found."
+      not_found: "No %{model_name} found."
