@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_07_07_024057) do
+ActiveRecord::Schema.define(version: 2023_07_10_023912) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -71,13 +71,15 @@ ActiveRecord::Schema.define(version: 2023_07_07_024057) do
     t.integer "non_adwords_count"
     t.string "non_adwords_urls", array: true
     t.integer "total_links_count"
+    t.uuid "user_id"
+    t.index ["user_id"], name: "index_search_results_on_user_id"
   end
 
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "full_name"
-    t.string "uid"
+    t.string "provider_uid"
     t.string "avatar_url"
     t.string "provider"
     t.string "reset_password_token"
@@ -92,4 +94,5 @@ ActiveRecord::Schema.define(version: 2023_07_07_024057) do
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "users", column: "resource_owner_id"
+  add_foreign_key "search_results", "users"
 end

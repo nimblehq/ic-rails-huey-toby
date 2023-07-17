@@ -4,14 +4,16 @@ module Api
   module V1
     module Users
       class OmniauthCallbacksController < Devise::OmniauthCallbacksController
-        rescue_from Exception, with: :render_error
-
         respond_to :json
 
         def google_oauth2
           user = User.from_omniauth(auth)
 
-          render_success(user)
+          if user.errors.empty?
+            render_success(user)
+          else
+            render_error(detail: user.errors.full_messages, status: :internal_server_error)
+          end
         end
 
         private
@@ -22,13 +24,9 @@ module Api
 
         def render_success(user)
           oauth_token = OauthToken.generate_access_token(user)
-          token_data = OauthTokenSerializer.new(oauth_token).serializable_hash[:data]
+          token_data = OauthTokenSerializer.new(oauth_token)
 
-          render json: { data: token_data }, status: :ok
-        end
-
-        def render_error(exception)
-          render json: { error: exception.message }, status: :internal_server_error
+          render json: token_data, status: :ok
         end
       end
     end
