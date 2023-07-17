@@ -24,7 +24,7 @@ module Api
       def index
         search_result_list = SearchResultsQuery.new(
           current_user.search_results, {
-            url_equals: params.dig(:filter, :url_equals)
+            url_equals: filter_params[:url_equals]
           }
         ).call
 
@@ -47,6 +47,10 @@ module Api
 
       def upload_form_params
         params.permit(:search_engine, :csv_file)
+      end
+
+      def filter_params
+        params.fetch(:filter, {}).permit(:url_equals)
       end
     end
   end

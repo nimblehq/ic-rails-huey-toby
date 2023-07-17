@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe SearchResultsQuery, type: :model do
   describe '#call' do
-    context 'when given NO filters' do
+    context 'given NO filters' do
       it 'returns all search results' do
         user = Fabricate(:user)
         Fabricate(:search_result, user_id: user.id, non_adwords_urls: ['wwww.nimblehq.co'])
@@ -19,7 +19,7 @@ RSpec.describe SearchResultsQuery, type: :model do
       end
     end
 
-    context 'when given url_equals filter' do
+    context 'given url_equals filter' do
       it 'returns only the search results that are equal to the url' do
         user = Fabricate(:user)
         Fabricate(:search_result, user_id: user.id, non_adwords_urls: ['wwww.nimblehq.co'])
