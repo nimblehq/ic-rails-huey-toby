@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-CONDITION_URL_EQUALS = ':url = ANY (adwords_top_urls) OR :url = ANY (non_adwords_urls)'
-
 class SearchResultsQuery
   attr_reader :search_results, :filters, :sorts
+
+  CONDITION_URL_EQUALS = ':url = ANY (adwords_top_urls) OR :url = ANY (non_adwords_urls)'
 
   def initialize(search_results = nil, filters = {})
     @search_results = search_results || SearchResult.all
