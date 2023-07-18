@@ -7,6 +7,7 @@ gem 'jsonapi-serializer' # Fast, simple and easily customizable JSON:API seriali
 gem 'rails', '7.0.1' # Latest stable
 gem 'pg' # Use Postgresql as database
 gem 'puma' # Use Puma as the app server
+gem 'mailgun-ruby' # Contains methods for easily interacting with the Mailgun API
 gem 'mini_magick' # A ruby wrapper for ImageMagick or GraphicsMagick command line
 gem 'pagy' # A pagination gem that is very light and fast
 gem 'discard' # Soft deletes for ActiveRecord
@@ -55,7 +56,6 @@ group :development, :test do
 
   # Utilities
   gem 'figaro' # Simple Rails app configuration
-  gem 'mailgun-ruby' # Contains methods for easily interacting with the Mailgun API
   gem 'listen' # Listens to file modifications
   gem 'letter_opener' # Preview mail in the browser instead of sending
   gem 'faker'
