@@ -82,8 +82,12 @@ RSpec.describe 'Search Results', type: :request do
     context 'given a valid params with url_equals filter' do
       it 'returns a successful response with JSON' do
         user = Fabricate(:user)
+
+        # Expected matches
         Fabricate(:search_result, user_id: user.id, non_adwords_urls: ['wwww.nimblehq.co'])
         Fabricate(:search_result, user_id: user.id, adwords_top_urls: ['wwww.nimblehq.co'])
+
+        # Non-matches
         Fabricate(:search_result, user_id: user.id, non_adwords_urls: ['wwww.nimblehq.co/compass'])
         Fabricate(:search_result, user_id: user.id, adwords_top_urls: ['wwww.nimblehq.co/compass'])
 
