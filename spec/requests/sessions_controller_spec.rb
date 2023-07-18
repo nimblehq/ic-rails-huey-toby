@@ -34,7 +34,7 @@ RSpec.describe 'Sessions', type: :request do
         }
 
         expect(response).to have_http_status(:unauthorized)
-        expect(JSON.parse(response.body)['errors'][0]['detail']).to include(I18n.t('devise.failure.invalid', authentication_keys: :email))
+        expect(JSON.parse(response.body)['errors'][0]['detail']).to eq(I18n.t('devise.failure.invalid', authentication_keys: :email))
       end
     end
 
@@ -51,7 +51,7 @@ RSpec.describe 'Sessions', type: :request do
         }
 
         expect(response).to have_http_status(:unauthorized)
-        expect(JSON.parse(response.body)['errors'][0]['detail']).to include(I18n.t('devise.failure.invalid', authentication_keys: :email))
+        expect(JSON.parse(response.body)['errors'][0]['detail']).to eq(I18n.t('devise.failure.invalid', authentication_keys: :email))
       end
     end
 
@@ -69,7 +69,7 @@ RSpec.describe 'Sessions', type: :request do
         }
 
         expect(response).to have_http_status(:unauthorized)
-        expect(JSON.parse(response.body)['errors'][0]['detail']).to include(I18n.t('devise.failure.invalid', authentication_keys: :email))
+        expect(JSON.parse(response.body)['errors'][0]['detail']).to eq(I18n.t('devise.failure.invalid', authentication_keys: :email))
       end
     end
 
@@ -87,7 +87,7 @@ RSpec.describe 'Sessions', type: :request do
         }
 
         expect(response).to have_http_status(:unauthorized)
-        expect(JSON.parse(response.body)['errors'][0]['detail']).to include(I18n.t('devise.failure.unconfirmed'))
+        expect(JSON.parse(response.body)['errors'][0]['detail']).to eq(I18n.t('devise.failure.unconfirmed'))
       end
     end
 

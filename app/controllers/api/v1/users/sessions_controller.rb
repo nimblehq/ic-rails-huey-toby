@@ -38,14 +38,14 @@ module Api
 
         def render_invalid_password_error
           render_error(
-            detail: [I18n.t('devise.failure.invalid', authentication_keys: :email)],
+            detail: I18n.t('devise.failure.invalid', authentication_keys: :email),
             status: :unauthorized
           )
         end
 
         def render_unconfirmed_user_error
           render_error(
-            detail: [I18n.t('devise.failure.unconfirmed')],
+            detail: I18n.t('devise.failure.unconfirmed'),
             status: :unauthorized
           )
         end
