@@ -2,6 +2,7 @@ FROM ruby:3.0.1-slim
 
 ARG BUILD_ENV=development
 ARG RUBY_ENV=development
+ARG NODE_ENV=development
 ARG APP_HOME=/ic_rails_huey_toby
 
 # Define all the envs here
