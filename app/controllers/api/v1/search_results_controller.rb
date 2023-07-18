@@ -37,7 +37,9 @@ module Api
         SearchResultsQuery.new(
           current_user.search_results, {
             url_equals: filter_params[:url_equals],
-            adwords_url_contains: filter_params[:adwords_url_contains]
+            adwords_url_contains: filter_params[:adwords_url_contains],
+            url_contains_at_least_one: filter_params[:url_contains_at_least_one],
+            url_contains_at_least_two: filter_params[:url_contains_at_least_two]
           }
         ).call
       end
@@ -55,7 +57,12 @@ module Api
       end
 
       def filter_params
-        params.fetch(:filter, {}).permit(:url_equals, :adwords_url_contains)
+        params.fetch(:filter, {}).permit(
+          :url_equals,
+          :adwords_url_contains,
+          :url_contains_at_least_one,
+          :url_contains_at_least_two
+        )
       end
     end
   end
