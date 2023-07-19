@@ -79,6 +79,32 @@ RSpec.describe 'Search Results', type: :request do
       end
     end
 
+    context 'given a valid params with url_equals filter' do
+      it 'returns a successful response with JSON' do
+        user = Fabricate(:user)
+
+        # Expected matches
+        Fabricate(:search_result, user_id: user.id, non_adwords_urls: ['wwww.nimblehq.co'])
+        Fabricate(:search_result, user_id: user.id, adwords_top_urls: ['wwww.nimblehq.co'])
+
+        # Non-matches
+        Fabricate(:search_result, user_id: user.id, non_adwords_urls: ['wwww.nimblehq.co/compass'])
+        Fabricate(:search_result, user_id: user.id, adwords_top_urls: ['wwww.nimblehq.co/compass'])
+
+        authorization_header = create_authorization_header(user: user)
+        params = { page: { number: 1, size: 20 }, filter: { url_equals: 'wwww.nimblehq.co' } }
+
+        get '/api/v1/search_results', headers: authorization_header, params: params
+
+        expect(JSON.parse(response.body)['data'][0]['type']).to eq('search_results')
+        expect(JSON.parse(response.body)['meta']['page']).to eq(1)
+        expect(JSON.parse(response.body)['meta']['pages']).to eq(1)
+        expect(JSON.parse(response.body)['meta']['page_size']).to eq(20)
+        expect(JSON.parse(response.body)['meta']['records']).to eq(2)
+        expect(response).to have_http_status(:ok)
+      end
+    end
+
     context 'given an UNAUTHENTICATED user' do
       it 'returns an unauthorized response with JSON' do
         params = { search_engine: 'google', csv_file: fixture_file_upload('upload_valid.csv', 'text/csv') }

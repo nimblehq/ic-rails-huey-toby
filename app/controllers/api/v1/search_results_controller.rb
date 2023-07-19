@@ -22,7 +22,12 @@ module Api
       end
 
       def index
-        search_result_list = current_user.search_results.order(:id)
+        search_result_list = SearchResultsQuery.new(
+          current_user.search_results, {
+            url_equals: filter_params[:url_equals]
+          }
+        ).call
+
         pagy, paginated_results = paginated_resources_for(search_result_list)
 
         search_result_serializer = SearchResultsSerializer.new(paginated_results, meta: meta_from_pagy(pagy))
@@ -42,6 +47,10 @@ module Api
 
       def upload_form_params
         params.permit(:search_engine, :csv_file)
+      end
+
+      def filter_params
+        params.fetch(:filter, {}).permit(:url_equals)
       end
     end
   end
