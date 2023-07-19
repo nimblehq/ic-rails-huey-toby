@@ -61,5 +61,65 @@ RSpec.describe SearchResultsQuery, type: :model do
         expect(search_results_query.search_results.count).to eq 1
       end
     end
+
+    context 'given filter_urls_contains_at_least filter' do
+      context 'given filter_urls_contains_at_least_one filter' do
+        it 'returns only the search results which contain the character' do
+          user = Fabricate(:user)
+
+          # Expected matches
+          Fabricate(:search_result, user_id: user.id, non_adwords_urls: [], adwords_top_urls: ['www.nimblehq.co/compass'])
+          Fabricate(:search_result, user_id: user.id, non_adwords_urls: ['www.nimblehq.co/compass'], adwords_top_urls: [])
+
+          # Non-matches
+          Fabricate(:search_result, user_id: user.id, non_adwords_urls: ['www.nimblehq.co'], adwords_top_urls: [])
+          Fabricate(:search_result, user_id: user.id, non_adwords_urls: [], adwords_top_urls: ['www.nimblehq.co'])
+
+          search_results_query = described_class.new(nil, { url_contains_at_least_one: '/' })
+
+          search_results_query.call
+
+          expect(search_results_query.search_results.count).to eq 2
+        end
+
+        it 'returns empty when the urls does NOT match the character' do
+          user = Fabricate(:user)
+
+          # Expected matches
+          Fabricate(:search_result, user_id: user.id, non_adwords_urls: [], adwords_top_urls: ['www.nimblehq.co/compass'])
+          Fabricate(:search_result, user_id: user.id, non_adwords_urls: ['www.nimblehq.co/compass'], adwords_top_urls: [])
+
+          # Non-matches
+          Fabricate(:search_result, user_id: user.id, non_adwords_urls: ['www.nimblehq.co'], adwords_top_urls: [])
+          Fabricate(:search_result, user_id: user.id, non_adwords_urls: [], adwords_top_urls: ['www.nimblehq.co'])
+
+          search_results_query = described_class.new(nil, { url_contains_at_least_one: '>' })
+
+          search_results_query.call
+
+          expect(search_results_query.search_results.count).to eq 0
+        end
+      end
+
+      context 'given filter_urls_contains_at_least_two filter' do
+        it 'returns only the search results which contain the character' do
+          user = Fabricate(:user)
+
+          # Expected matches
+          Fabricate(:search_result, user_id: user.id, non_adwords_urls: [], adwords_top_urls: ['www.nimblehq.co/compass/development/code-conventions'])
+          Fabricate(:search_result, user_id: user.id, non_adwords_urls: ['www.nimblehq.co/compass/development'], adwords_top_urls: [])
+
+          # Non-matches
+          Fabricate(:search_result, user_id: user.id, non_adwords_urls: ['www.nimblehq.co/compass'], adwords_top_urls: [])
+          Fabricate(:search_result, user_id: user.id, non_adwords_urls: [], adwords_top_urls: ['www.nimblehq.co'])
+
+          search_results_query = described_class.new(nil, { url_contains_at_least_two: '/' })
+
+          search_results_query.call
+
+          expect(search_results_query.search_results.count).to eq 2
+        end
+      end
+    end
   end
 end
