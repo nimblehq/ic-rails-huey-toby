@@ -10,12 +10,12 @@ module Api
 
       def create
         if upload_form.valid?
-          search_results = upload_form.save
+          search_result_list = upload_form.save
 
-          message = I18n.t('activemodel.notices.models.search_result.create')
-          search_results_serializer = SearchResultsSerializer.new(search_results, meta: { message: message })
+          upload_meta = upload_meta(search_result_list: search_result_list)
+          search_result_serializer = SearchResultListSerializer.new(search_result_list, upload_meta)
 
-          render(json: search_results_serializer, status: :created)
+          render(json: search_result_serializer, status: :created)
         else
           render_error(detail: upload_form.errors.full_messages, status: :unprocessable_entity)
         end
@@ -24,9 +24,17 @@ module Api
       def index
         search_result_list = create_search_results_query
 
-        pagy, paginated_results = paginated_resources_for(search_result_list)
+        pagy, paginated_result_list = paginated_resources_for(search_result_list)
 
-        search_result_serializer = SearchResultsSerializer.new(paginated_results, meta: meta_from_pagy(pagy))
+        search_result_list_serializer = SearchResultListSerializer.new(paginated_result_list, meta: meta_from_pagy(pagy))
+
+        render(json: search_result_list_serializer, status: :ok)
+      end
+
+      def show
+        search_result = SearchResult.find(params[:id])
+
+        search_result_serializer = SearchResultSerializer.new(search_result)
 
         render(json: search_result_serializer, status: :ok)
       end
@@ -56,6 +64,15 @@ module Api
 
       def filter_params
         params.fetch(:filter, {}).permit(:url_equals, :adwords_url_contains)
+      end
+
+      def upload_meta(search_result_list:)
+        {
+          meta: {
+            message: I18n.t('activemodel.notices.models.search_result.create'),
+            total: search_result_list.size
+          }
+        }
       end
     end
   end

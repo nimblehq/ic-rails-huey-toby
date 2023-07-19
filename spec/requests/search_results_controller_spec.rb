@@ -12,7 +12,7 @@ RSpec.describe 'Search Results', type: :request do
 
           post '/api/v1/upload', headers: authorization_header, params: params
 
-          expect(JSON.parse(response.body)['data'][0]['type']).to eq('search_results')
+          expect(JSON.parse(response.body)['data'][0]['type']).to eq('search_result_list')
           expect(JSON.parse(response.body)['meta']['message']).to eq(I18n.t('activemodel.notices.models.search_result.create'))
           expect(response).to have_http_status(:created)
         end
@@ -96,7 +96,7 @@ RSpec.describe 'Search Results', type: :request do
 
         get '/api/v1/search_results', headers: authorization_header, params: params
 
-        expect(JSON.parse(response.body)['data'][0]['type']).to eq('search_results')
+        expect(JSON.parse(response.body)['data'][0]['type']).to eq('search_result_list')
         expect(JSON.parse(response.body)['meta']['page']).to eq(1)
         expect(JSON.parse(response.body)['meta']['pages']).to eq(1)
         expect(JSON.parse(response.body)['meta']['page_size']).to eq(20)
@@ -128,7 +128,7 @@ RSpec.describe 'Search Results', type: :request do
 
           get '/api/v1/search_results', headers: authorization_header
 
-          expect(JSON.parse(response.body)['data'][0]['type']).to eq('search_results')
+          expect(JSON.parse(response.body)['data'][0]['type']).to eq('search_result_list')
           expect(JSON.parse(response.body)['meta']['page']).to eq(1)
           expect(JSON.parse(response.body)['meta']['pages']).to eq(2)
           expect(JSON.parse(response.body)['meta']['page_size']).to eq(10)
@@ -146,7 +146,7 @@ RSpec.describe 'Search Results', type: :request do
 
           get '/api/v1/search_results', headers: authorization_header, params: params
 
-          expect(JSON.parse(response.body)['data'][0]['type']).to eq('search_results')
+          expect(JSON.parse(response.body)['data'][0]['type']).to eq('search_result_list')
           expect(JSON.parse(response.body)['meta']['page']).to eq(1)
           expect(JSON.parse(response.body)['meta']['pages']).to eq(1)
           expect(JSON.parse(response.body)['meta']['page_size']).to eq(20)
@@ -159,6 +159,45 @@ RSpec.describe 'Search Results', type: :request do
     context 'given an UNAUTHENTICATED user' do
       it 'returns an unauthorized response with JSON' do
         get '/api/v1/search_results'
+
+        expect(JSON.parse(response.body)['errors'][0]['detail']).to eq('The access token is invalid')
+        expect(JSON.parse(response.body)['errors'][0]['code']).to eq('invalid_token')
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+  end
+
+  describe 'GET #show' do
+    context 'given an existing search result ID' do
+      it 'returns a successful response with JSON' do
+        user = Fabricate(:user)
+        authorization_header = create_authorization_header(user: user)
+        search_result = Fabricate(:search_result, id: 1, user_id: user.id)
+
+        get '/api/v1/search_results/1', headers: authorization_header
+
+        expect(JSON.parse(response.body)['data']['type']).to eq('search_result')
+        expect(JSON.parse(response.body)['data']['id']).to eq(search_result.id.to_s)
+        expect(response).to have_http_status(:ok)
+      end
+    end
+
+    context 'given a NON-EXISTING search result ID' do
+      it 'returns a not found error response with JSON' do
+        user = Fabricate(:user)
+        Fabricate.times(20, :search_result, user_id: user.id)
+        authorization_header = create_authorization_header(user: user)
+
+        get '/api/v1/search_results/9999', headers: authorization_header
+
+        expect(JSON.parse(response.body)['errors'][0]['detail']).to eq('No Search result found.')
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+
+    context 'given an UNAUTHENTICATED user' do
+      it 'returns an unauthorized response with JSON' do
+        get '/api/v1/search_results/1'
 
         expect(JSON.parse(response.body)['errors'][0]['detail']).to eq('The access token is invalid')
         expect(JSON.parse(response.body)['errors'][0]['code']).to eq('invalid_token')
