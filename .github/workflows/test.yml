@@ -13,7 +13,7 @@ env:
   DOCKER_REGISTRY_USERNAME: ${{ github.repository_owner }}
   DOCKER_REGISTRY_TOKEN: ${{ secrets.DOCKER_REGISTRY_TOKEN }}
   DOCKER_IMAGE: ${{ github.repository }}
-  NODE_VERSION: 16
+  NODE_VERSION: 18
 
   # Set the default docker-compose file
   COMPOSE_FILE: docker-compose.test.yml
@@ -130,6 +130,12 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'yarn'
 
       - name: Run Undercover
         run: bundle exec undercover-report

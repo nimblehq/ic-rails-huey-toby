@@ -37,6 +37,9 @@ gem 'ronin-web-user_agents' # User agent generator
 # gem 'rails-i18n', '~> 6.0.0' # Translations for Rails
 # gem 'devise-i18n' # Translations for Devise
 
+# Exporting
+gem 'grover' # Convert HTML to PDF using headless Chrome
+
 group :development do
   gem 'foreman' # Manage Procfile-based applications
   gem 'better_errors' # Better error page for Rails and other Rack apps
