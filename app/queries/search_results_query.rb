@@ -39,13 +39,19 @@ class SearchResultsQuery
   def filter_urls_contains_at_least(character, count = 1)
     if character.present?
       search_result_ids = @search_results.select do |search_result|
-        search_result.adwords_top_urls.any? { |url| url.scan(character).count >= count } ||
-          search_result.non_adwords_urls.any? { |url| url.scan(character).count >= count }
+        at_least_character_count?(search_result.adwords_top_urls, character, count) ||
+          at_least_character_count?(search_result.non_adwords_urls, character, count)
       end.pluck(:id)
 
       @search_results.where(id: search_result_ids).order(:id)
     else
       @search_results
     end
+  end
+
+  private
+
+  def at_least_character_count?(urls, character, count)
+    urls.any? { |url| url.scan(character).count >= count }
   end
 end
