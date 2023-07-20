@@ -14,7 +14,7 @@ class SearchResultsQuery
   def call
     @search_results = filter_by_url(filters[:url_equals])
     @search_results = filter_adwords_url_contains(filters[:adwords_url_contains])
-    @search_results = filter_urls_contains_at_least(filters[:url_contains], filters[:match_count])
+    @search_results = filter_urls_contains_at_least(filters[:url_contains], filters[:match_count] || 1)
 
     @search_results.order(:id)
   end
@@ -35,7 +35,7 @@ class SearchResultsQuery
     end
   end
 
-  def filter_urls_contains_at_least(word, match_count = 1)
+  def filter_urls_contains_at_least(word, match_count)
     if word.present?
       search_result_ids = @search_results.select do |search_result|
         urls = search_result.adwords_top_urls + search_result.non_adwords_urls

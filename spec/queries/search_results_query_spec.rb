@@ -63,8 +63,8 @@ RSpec.describe SearchResultsQuery, type: :model do
     end
 
     context 'given filter_urls_contains filter' do
-      context 'given filter_match_count at least one filter' do
-        it 'returns only the search results which contain the character' do
+      context 'given match_count filter is nil' do
+        it 'returns only the search results which contain specific word at least once' do
           user = Fabricate(:user)
 
           # Expected matches
@@ -75,7 +75,7 @@ RSpec.describe SearchResultsQuery, type: :model do
           Fabricate(:search_result, user_id: user.id, non_adwords_urls: ['www.nimblehq.co'], adwords_top_urls: [])
           Fabricate(:search_result, user_id: user.id, non_adwords_urls: [], adwords_top_urls: ['www.nimblehq.co'])
 
-          search_results_query = described_class.new(nil, { url_contains: '/', match_count: 1 })
+          search_results_query = described_class.new(nil, { url_contains: '/' })
 
           search_results_query.call
 
@@ -83,8 +83,8 @@ RSpec.describe SearchResultsQuery, type: :model do
         end
       end
 
-      context 'given filter_match_count at least two filter' do
-        it 'returns only the search results which contain the character' do
+      context 'given match_count filter is NOT nil' do
+        it 'returns only the search results which contain a specific word at least for the define occurrence match count' do
           user = Fabricate(:user)
 
           # Expected matches
@@ -103,7 +103,7 @@ RSpec.describe SearchResultsQuery, type: :model do
         end
       end
 
-      it 'returns empty when the urls does NOT match the character' do
+      it 'returns empty when the urls does NOT match a specific word' do
         user = Fabricate(:user)
 
         # Expected matches
