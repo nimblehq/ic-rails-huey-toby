@@ -118,7 +118,7 @@ RSpec.describe 'Search Results', type: :request do
         Fabricate(:search_result, user_id: user.id, non_adwords_urls: [], adwords_top_urls: ['www.nimblehq.co'])
 
         authorization_header = create_authorization_header(user: user)
-        params = { page: { number: 1, size: 20 }, filter: { url_contains_at_least_one: '/' } }
+        params = { page: { number: 1, size: 20 }, filter: { url_contains: '/', match_count: 1 } }
 
         get '/api/v1/search_results', headers: authorization_header, params: params
 
@@ -144,7 +144,7 @@ RSpec.describe 'Search Results', type: :request do
         Fabricate(:search_result, user_id: user.id, non_adwords_urls: [], adwords_top_urls: ['www.nimblehq.co'])
 
         authorization_header = create_authorization_header(user: user)
-        params = { page: { number: 1, size: 20 }, filter: { url_contains_at_least_two: '/' } }
+        params = { page: { number: 1, size: 20 }, filter: { url_contains: '/', match_count: 2 } }
 
         get '/api/v1/search_results', headers: authorization_header, params: params
 
