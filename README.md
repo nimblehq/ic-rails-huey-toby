@@ -1,8 +1,12 @@
-Staging: https://ic-rails-huey-toby-staging.herokuapp.com/
-
-Production: https://ic-rails-huey-toby.herokuapp.com/
-
-[![Build Status](https://img.shields.io/github/actions/workflow/status/nimblehq/ic-rails-huey-toby/test.yml?branch=main)](https://github.com/nimblehq/ic-rails-huey-toby)
+<p align="center">
+  <img src="https://img.shields.io/github/actions/workflow/status/nimblehq/ic-rails-huey-toby/test.yml?branch=main" />
+  <a href="https://ic-rails-huey-toby-staging.herokuapp.com/">
+     <img src="https://img.shields.io/badge/Heroku-Staging-purple" />
+  </a>
+  <a href="https://ic-rails-huey-toby.herokuapp.com/">
+     <img src="https://img.shields.io/badge/Heroku-Production-purple" />
+  </a>
+</p>
 
 ## Introduction
 
@@ -32,14 +36,14 @@ To run the app locally, do the following:
 Here's a summary of the available endpoints:
 
 - Sign-up with e-mail/password and Google.
-- Sign-in wit e-mail/password and Google.
+- Sign-in with e-mail/password and Google.
 - Upload keywords with Google/Bing.
 - Show list of search results.
 - Filter through search results.
 - Show details of search result.
 - Download PDF of search result.
 
-For convenience, you can import the Postman collection: `postman-collection.json`
+For convenience, you can import the Postman collection: [postman-collection.json](postman-collection.json)
 
 ## Workflows
 

@@ -109,19 +109,7 @@
 								{
 									"key": "csv_file",
 									"type": "file",
-									"src": "/Users/tuubz/Desktop/keywords.csv"
-								},
-								{
-									"key": "client_id",
-									"value": "{{CLIENT_ID}}",
-									"type": "text",
-									"disabled": true
-								},
-								{
-									"key": "client_secret",
-									"value": "{{CLIENT_SECRET}}",
-									"type": "text",
-									"disabled": true
+									"src": []
 								}
 							]
 						},
@@ -214,9 +202,6 @@
 			"item": [
 				{
 					"name": "Index",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
 					"request": {
 						"auth": {
 							"type": "oauth2",
@@ -308,28 +293,6 @@
 						},
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "csv_file",
-									"type": "file",
-									"src": "/Users/tuubz/Desktop/keywords.csv"
-								},
-								{
-									"key": "client_id",
-									"value": "{{CLIENT_ID}}",
-									"type": "text",
-									"disabled": true
-								},
-								{
-									"key": "client_secret",
-									"value": "{{CLIENT_SECRET}}",
-									"type": "text",
-									"disabled": true
-								}
-							]
-						},
 						"url": {
 							"raw": "{{base_url}}/api/v1/search_results",
 							"host": [
@@ -659,25 +622,7 @@
 						"header": [],
 						"body": {
 							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "csv_file",
-									"type": "file",
-									"src": "/Users/tuubz/Desktop/keywords.csv"
-								},
-								{
-									"key": "client_id",
-									"value": "{{CLIENT_ID}}",
-									"type": "text",
-									"disabled": true
-								},
-								{
-									"key": "client_secret",
-									"value": "{{CLIENT_SECRET}}",
-									"type": "text",
-									"disabled": true
-								}
-							]
+							"formdata": []
 						},
 						"url": {
 							"raw": "{{base_url}}/api/v1/search_results?filter[url_equals]=https://www.apple.com/th-en/shop/buy-watch/apple-watch",
@@ -701,9 +646,6 @@
 				},
 				{
 					"name": "Filter (adwords_url_contains)",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
 					"request": {
 						"auth": {
 							"type": "oauth2",
@@ -795,28 +737,6 @@
 						},
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "csv_file",
-									"type": "file",
-									"src": "/Users/tuubz/Desktop/keywords.csv"
-								},
-								{
-									"key": "client_id",
-									"value": "{{CLIENT_ID}}",
-									"type": "text",
-									"disabled": true
-								},
-								{
-									"key": "client_secret",
-									"value": "{{CLIENT_SECRET}}",
-									"type": "text",
-									"disabled": true
-								}
-							]
-						},
 						"url": {
 							"raw": "{{base_url}}/api/v1/search_results?filter[adwords_url_contains]=www.facebook.com",
 							"host": [
@@ -838,10 +758,7 @@
 					"response": []
 				},
 				{
-					"name": "Filter (url_contains_at_least_one)",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
+					"name": "Filter (url_contains_word)",
 					"request": {
 						"auth": {
 							"type": "oauth2",
@@ -933,30 +850,8 @@
 						},
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "csv_file",
-									"type": "file",
-									"src": "/Users/tuubz/Desktop/keywords.csv"
-								},
-								{
-									"key": "client_id",
-									"value": "{{CLIENT_ID}}",
-									"type": "text",
-									"disabled": true
-								},
-								{
-									"key": "client_secret",
-									"value": "{{CLIENT_SECRET}}",
-									"type": "text",
-									"disabled": true
-								}
-							]
-						},
 						"url": {
-							"raw": "{{base_url}}/api/v1/search_results?filter[url_contains_at_least_one]=:",
+							"raw": "{{base_url}}/api/v1/search_results?filter[url_contains]=x&filter[match_count]=1",
 							"host": [
 								"{{base_url}}"
 							],
@@ -967,146 +862,12 @@
 							],
 							"query": [
 								{
-									"key": "filter[url_contains_at_least_one]",
-									"value": ":"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Filter (url_contains_at_least_two)",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"auth": {
-							"type": "oauth2",
-							"oauth2": [
-								{
-									"key": "clientSecret",
-									"value": "{{GOOGLE_CLIENT_SECRET}}",
-									"type": "string"
+									"key": "filter[url_contains]",
+									"value": "x"
 								},
 								{
-									"key": "clientId",
-									"value": "{{GOOGLE_CLIENT_ID}}",
-									"type": "string"
-								},
-								{
-									"key": "authRequestParams",
-									"value": [
-										{
-											"key": "access_type",
-											"value": "offline",
-											"enabled": true,
-											"send_as": "request_url"
-										},
-										{
-											"key": "scope",
-											"value": "profile email",
-											"enabled": true,
-											"send_as": "request_url"
-										}
-									],
-									"type": "any"
-								},
-								{
-									"key": "accessTokenUrl",
-									"value": "{{base_url}}/api/v1/users/auth/google_oauth2/callback",
-									"type": "string"
-								},
-								{
-									"key": "redirect_uri",
-									"value": "{{base_url}}/api/v1/users/auth/google_oauth2/callback",
-									"type": "string"
-								},
-								{
-									"key": "tokenRequestParams",
-									"value": [],
-									"type": "any"
-								},
-								{
-									"key": "addTokenTo",
-									"value": "header",
-									"type": "string"
-								},
-								{
-									"key": "client_authentication",
-									"value": "body",
-									"type": "string"
-								},
-								{
-									"key": "grant_type",
-									"value": "authorization_code",
-									"type": "string"
-								},
-								{
-									"key": "authUrl",
-									"value": "https://accounts.google.com/o/oauth2/v2/auth",
-									"type": "string"
-								},
-								{
-									"key": "useBrowser",
-									"value": false,
-									"type": "boolean"
-								},
-								{
-									"key": "headerPrefix",
-									"value": "Bearer",
-									"type": "string"
-								},
-								{
-									"key": "state",
-									"value": "",
-									"type": "string"
-								},
-								{
-									"key": "scope",
-									"value": "",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "csv_file",
-									"type": "file",
-									"src": "/Users/tuubz/Desktop/keywords.csv"
-								},
-								{
-									"key": "client_id",
-									"value": "{{CLIENT_ID}}",
-									"type": "text",
-									"disabled": true
-								},
-								{
-									"key": "client_secret",
-									"value": "{{CLIENT_SECRET}}",
-									"type": "text",
-									"disabled": true
-								}
-							]
-						},
-						"url": {
-							"raw": "{{base_url}}/api/v1/search_results?filter[url_contains_at_least_two]=:",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"search_results"
-							],
-							"query": [
-								{
-									"key": "filter[url_contains_at_least_two]",
-									"value": ":"
+									"key": "filter[match_count]",
+									"value": "1"
 								}
 							]
 						}
