@@ -65,8 +65,9 @@ module Api
       end
 
       def filter_params
-        params.fetch(:filter, {}).permit(:url_equals, :adwords_url_contains, :url_contains,
-                                         :match_count)
+        params
+          .fetch(:filter, {})
+          .permit(:url_equals, :adwords_url_contains, :url_contains, :match_count)
       end
 
       def upload_meta(search_result_list:)

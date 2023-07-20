@@ -35,22 +35,17 @@ class SearchResultsQuery
     end
   end
 
-  def filter_urls_contains_at_least(character, match_count = 1)
-    if character.present?
+  def filter_urls_contains_at_least(word, match_count = 1)
+    if word.present?
       search_result_ids = @search_results.select do |search_result|
-        at_least_character_count?(search_result.adwords_top_urls, character, match_count) ||
-          at_least_character_count?(search_result.non_adwords_urls, character, match_count)
+        urls = search_result.adwords_top_urls + search_result.non_adwords_urls
+
+        urls&.any? { |url| url.scan(word).count >= match_count.to_i }
       end.pluck(:id)
 
       @search_results.where(id: search_result_ids)
     else
       @search_results
     end
-  end
-
-  private
-
-  def at_least_character_count?(urls, character, match_count)
-    urls&.any? { |url| url.scan(character).count >= match_count.to_i }
   end
 end
