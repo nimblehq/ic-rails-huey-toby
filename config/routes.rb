@@ -8,12 +8,15 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       resources :upload, only: [:create], controller: 'search_results'
-      resources :search_results, only: [:index]
+      resources :search_results, only: [:index, :show] do
+        resource :export, only: [:show]
+      end
 
       devise_for :users, controllers: {
         sessions: 'api/v1/users/sessions',
         registrations: 'api/v1/users/registrations',
-        omniauth_callbacks: 'api/v1/users/omniauth_callbacks'
+        omniauth_callbacks: 'api/v1/users/omniauth_callbacks',
+        confirmations: 'api/v1/users/confirmations'
       }
 
       root "/health#show"

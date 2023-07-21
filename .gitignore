@@ -39,3 +39,6 @@
 
 # Ignore the test coverage results from SimpleCov
 /coverage
+
+# Ignore the local yarn cache directory
+node_modules

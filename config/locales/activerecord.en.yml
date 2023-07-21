@@ -1,0 +1,4 @@
+en:
+  activerecord:
+    errors:
+      not_found: No %{model_name} found.
