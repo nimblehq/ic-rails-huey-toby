@@ -61,5 +61,65 @@ RSpec.describe SearchResultsQuery, type: :model do
         expect(search_results_query.search_results.count).to eq 1
       end
     end
+
+    context 'given filter_urls_contains filter' do
+      context 'given match_count filter is nil' do
+        it 'returns only the search results which contain specific word at least once' do
+          user = Fabricate(:user)
+
+          # Expected matches
+          Fabricate(:search_result, user_id: user.id, non_adwords_urls: [], adwords_top_urls: ['www.nimblehq.co/compass'])
+          Fabricate(:search_result, user_id: user.id, non_adwords_urls: ['www.nimblehq.co/compass'], adwords_top_urls: [])
+
+          # Non-matches
+          Fabricate(:search_result, user_id: user.id, non_adwords_urls: ['www.nimblehq.co'], adwords_top_urls: [])
+          Fabricate(:search_result, user_id: user.id, non_adwords_urls: [], adwords_top_urls: ['www.nimblehq.co'])
+
+          search_results_query = described_class.new(nil, { url_contains: '/' })
+
+          search_results_query.call
+
+          expect(search_results_query.search_results.count).to eq 2
+        end
+      end
+
+      context 'given match_count filter is NOT nil' do
+        it 'returns only the search results which contain a specific word at least for the defined occurrence match count' do
+          user = Fabricate(:user)
+
+          # Expected matches
+          Fabricate(:search_result, user_id: user.id, non_adwords_urls: [], adwords_top_urls: ['www.nimblehq.co/compass/development/code-conventions'])
+          Fabricate(:search_result, user_id: user.id, non_adwords_urls: ['www.nimblehq.co/compass/development'], adwords_top_urls: [])
+
+          # Non-matches
+          Fabricate(:search_result, user_id: user.id, non_adwords_urls: ['www.nimblehq.co/compass'], adwords_top_urls: [])
+          Fabricate(:search_result, user_id: user.id, non_adwords_urls: [], adwords_top_urls: ['www.nimblehq.co'])
+
+          search_results_query = described_class.new(nil, { url_contains: '/', match_count: 2 })
+
+          search_results_query.call
+
+          expect(search_results_query.search_results.count).to eq 2
+        end
+      end
+
+      it 'returns empty when the urls does NOT match a specific word' do
+        user = Fabricate(:user)
+
+        # Expected matches
+        Fabricate(:search_result, user_id: user.id, non_adwords_urls: [], adwords_top_urls: ['www.nimblehq.co/compass'])
+        Fabricate(:search_result, user_id: user.id, non_adwords_urls: ['www.nimblehq.co/compass'], adwords_top_urls: [])
+
+        # Non-matches
+        Fabricate(:search_result, user_id: user.id, non_adwords_urls: ['www.nimblehq.co'], adwords_top_urls: [])
+        Fabricate(:search_result, user_id: user.id, non_adwords_urls: [], adwords_top_urls: ['www.nimblehq.co'])
+
+        search_results_query = described_class.new(nil, { url_contains: '>', match_count: 1 })
+
+        search_results_query.call
+
+        expect(search_results_query.search_results.count).to eq 0
+      end
+    end
   end
 end
