@@ -84,7 +84,7 @@ RSpec.describe SearchResultsQuery, type: :model do
       end
 
       context 'given match_count filter is NOT nil' do
-        it 'returns only the search results which contain a specific word at least for the define occurrence match count' do
+        it 'returns only the search results which contain a specific word at least for the defined occurrence match count' do
           user = Fabricate(:user)
 
           # Expected matches
